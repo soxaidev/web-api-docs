@@ -1,0 +1,12 @@
+---
+title: "Rate limits"
+description: "Write integrations that use the SOXAI API fairly and reliably."
+---
+
+The SOXAI API does not currently enforce a documented request-rate limit. This does not mean that an integration should send unlimited concurrent requests.
+
+Split large data retrievals by the [documented request sizes](/guides/quickstart#request-sizes-and-pagination), process each page before requesting the next one, and avoid retry loops that immediately repeat a failed request.
+
+SOXAI plans to introduce explicit limits. Build clients now so they handle `429 Too Many Requests` and honor the `Retry-After` header when it is present. Doing so prevents a future limit from requiring a client redesign.
+
+For transient server failures, use bounded exponential backoff with jitter. Do not retry authentication (`401`) or authorization (`403`) failures until the credential or access scope has been corrected.

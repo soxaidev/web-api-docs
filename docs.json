@@ -1,0 +1,40 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "SOXAI API Documentation",
+  "colors": {
+    "primary": "#1C8C7A",
+    "light": "#51B6A6",
+    "dark": "#126153"
+  },
+  "api": {
+    "playground": {
+      "display": "interactive"
+    },
+    "examples": {
+      "languages": ["curl", "python", "javascript"]
+    }
+  },
+  "navigation": {
+    "groups": [
+      {
+        "group": "Get started",
+        "pages": [
+          "guides/quickstart",
+          "guides/authentication",
+          "guides/rate-limits",
+          "guides/data-fields",
+          "guides/troubleshooting"
+        ]
+      },
+      {
+        "group": "Reference",
+        "openapi": "openapi-public.json"
+      },
+      {
+        "group": "About",
+        "pages": ["glossary", "changelog", "support"]
+      }
+    ]
+  }
+}

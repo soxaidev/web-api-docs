@@ -1,0 +1,33 @@
+---
+title: "Authentication"
+description: "Choose and use a SOXAI API credential."
+---
+
+Most SOXAI API endpoints accept one of two credentials. Send only one credential with each request.
+
+| Credential | Header | Lifetime | Best for |
+| --- | --- | --- | --- |
+| ID token | `Authorization: Bearer <idToken>` | One hour | Calls made on behalf of a signed-in person. |
+| API key | `soxai-api-key: <key>` | Long-lived | Server-to-server integrations. |
+
+## ID token and refresh token
+
+`POST /api/login` returns an `idToken`, a `refreshToken`, and the account's `localId`.
+
+- Send the `idToken` as the Bearer token for API calls.
+- Use the `refreshToken` to obtain a new ID token when necessary.
+- Do not use the refresh token as an API request credential.
+
+An ID token represents the signed-in user. This is the preferred credential when an application acts for a person, because removing that person's access also stops subsequent API use.
+
+## API key
+
+An API key is the long-lived alternative to an ID token. Use it for a service that cannot maintain a person's session. Store the key in a secret manager and never expose it in browser code, source control, logs, support tickets, or email.
+
+The [API Keys](/api-reference/api-keys) reference documents the endpoints for reading the caller's key. Contact SOXAI if your integration needs API-key access.
+
+## Authorization is separate from authentication
+
+Authentication identifies the caller. Authorization determines which users, organizations, and data that caller can access. The **Authorization** section at the bottom of each API-reference endpoint is the source of truth for that endpoint.
+
+If a request returns `401`, the credential is missing, invalid, or expired. If it returns `403`, the credential is valid but the caller is not permitted to make that request.

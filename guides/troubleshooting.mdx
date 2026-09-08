@@ -1,0 +1,48 @@
+---
+title: "Troubleshooting"
+description: "Find common causes of missing data, invitations, and validation errors."
+---
+
+## Check sync status before treating data as missing
+
+Data endpoints return data that has reached SOXAI. They cannot distinguish a missing measurement from data that has not yet synced from the ring.
+
+- `GET /api/ProcessLog/{query_uid}` shows one user's processing history. It is available to `PartnerAdmin` and `Admin` callers within their authorized scope.
+- `GET /api/LastProcessLog` returns the most recent process-log entry for a user or organization. Use it to confirm the period for which data is available.
+- `GET /api/users/sync-logs` returns the signed-in user's own ring sync history.
+
+Review the Authorization section on each endpoint before calling it.
+
+## Resend an invitation
+
+An organization administrator can resend an invitation with:
+
+`GET /api/orgs/{org_id}/ResendInvitationEmail/{uid}`
+
+Confirm that the organization ID and user ID identify the intended membership before resending the email.
+
+## Withdraw data-sharing consent
+
+To stop an organization from receiving a member's shared data, update that organization membership with:
+
+`PUT /api/orgs/{org_id}/orgUsers/{uid}`
+
+Set `allowDataSharing` to `false` in the request body. This is an organization-membership update, not a deletion of the user's account.
+
+## Understand validation errors
+
+A `422 Unprocessable Entity` response has a different shape from other API errors:
+
+```json
+{
+  "detail": [
+    {
+      "loc": ["query", "start_day"],
+      "msg": "field required",
+      "type": "value_error.missing"
+    }
+  ]
+}
+```
+
+Use each entry in `detail` to locate and correct the parameter or request-body field. An unauthorized request is rejected before its body is validated, so correct `401` or `403` errors first.

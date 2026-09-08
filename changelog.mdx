@@ -1,0 +1,26 @@
+---
+title: "Changelog"
+description: "Changes to the public SOXAI API documentation and OpenAPI specification."
+---
+
+## Versioning
+
+This changelog versions the public API documentation as a whole. Its version is independent of the `/api/v2/` URL prefix, which identifies the generation of the data endpoints.
+
+- **MAJOR**: a change that necessarily breaks an existing client, including removing, renaming, or changing the type of a response field; adding a required parameter; changing a parameter's meaning; removing an endpoint or authentication method; or removing a public operation.
+- **MINOR**: a backward-compatible addition, including a new endpoint, optional parameter, response field, role, or public operation.
+- **PATCH**: a behavior-preserving correction, including documentation, example, or tag-description fixes.
+
+Response fields can be added in a MINOR release. Clients should ignore fields they do not recognize. Adding `x-internal` is MINOR; removing it is MAJOR because it removes a public operation.
+
+## [1.0.0] - 2026-09-08
+
+This is the first public release of the SOXAI API documentation. Earlier GitHub releases are not retrospectively included.
+
+### Breaking
+
+- Renamed 93 `operationId` values and 13 generated `Body_*` schema names before the first public release. Regenerate any client built from the prior internal OpenAPI document.
+
+### Added
+
+- Published the public OpenAPI specification, interactive API reference, integration guides, glossary, and production-access request path.

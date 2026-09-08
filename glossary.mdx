@@ -1,0 +1,28 @@
+---
+title: "Glossary"
+description: "How SOXAI uses company, organization, team, member, and family group."
+---
+
+SOXAI has two separate grouping systems. Their names can sound similar, but they serve different purposes.
+
+```text
+Company
+└── Organization (Org)
+    └── Member
+        └── teams: a label only; it does not change access rights
+
+Family Group
+└── Members who choose which metrics to share with one another
+```
+
+## Company, organization, and member
+
+A company can own one or more organizations. An organization owns a member roster. A member belongs to an organization and can have one or more `teams` labels. A `teams` label is not a permission boundary.
+
+For the definitions and access rules that are enforced by the API, see [Organizations](/api-reference/organizations), [Organization Members](/api-reference/organization-members), and the global **Who can read whose data** section in the API reference.
+
+## Family Group
+
+A Family Group is separate from a company or organization. Its members choose, per metric, what they share with one another. Family Group access is based on a member's role inside that group, not on an organization or company role.
+
+See [Family Groups](/api-reference/family-groups) for the authoritative endpoint descriptions and authorization rules.

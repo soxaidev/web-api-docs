@@ -1,0 +1,20 @@
+---
+title: "Data fields"
+description: "Understand field names, missing values, and units in SOXAI data responses."
+---
+
+## Prefer v2 for new integrations
+
+The v2 data endpoints return standardized field names and are the interface for a new integration. Their response schemas and field tables are included with each endpoint in the API reference.
+
+When a v2 field has no value, the response includes that key with `null`. A missing measurement is not represented as `0`.
+
+## v1 fields are database field names
+
+The v1 data endpoints return the raw field names from the database. Those names can change when the underlying database changes, so v1 is unsuitable for integrations that need a stable response contract. Prefer v2 whenever it provides the data you need.
+
+## Units and undocumented fields
+
+Field tables state a unit when it is documented. A unit shown as `not documented` means SOXAI does not currently publish a confirmed unit or meaning for that field; do not infer one from its name.
+
+See the field tables on [Data (v2)](/api-reference/data-v2) endpoints for standardized fields and on [Data (v1)](/api-reference/data-v1) endpoints for raw database fields.
