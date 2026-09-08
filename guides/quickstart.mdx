@@ -38,11 +38,13 @@ Keep requests within the limits below and divide larger exports into multiple re
 | One user's v2 data | 366 days | Split longer periods into requests of no more than 366 days. |
 | Organization or company v2 data | 31 days | Split date ranges into monthly requests. |
 | `uid_list` | 100 users | Send multiple requests for larger user sets. |
-| `page` | 100 users per page | Increment the zero-based page number until the response has no next page. |
+| `page` | 100 users per page | Used only when `uid_list` is omitted. Start at zero and increment it for each additional page. |
 
 The v1 single-user data endpoints do not currently enforce a date-range maximum. Still divide large v1 exports into manageable periods to avoid long-running requests.
 
-All v1 data endpoints and the seven v2 data endpoints support `format=csv`. `GET /api/v2/GroupView/{group_id}` does not support CSV.
+For organization-wide JSON requests, a result that fits on one page is returned as an array. When more than one page is required, the response is an object whose `data` key contains the records and whose `pagination` key contains the paging metadata. Continue requesting successive page numbers until `data` contains fewer than 100 records. When `uid_list` is provided, `page` is ignored.
+
+All three v1 data endpoints and the five v2 data endpoints support `format=csv`. `GET /api/v2/GroupView/{group_id}` does not support CSV.
 
 ## Build for compatible additions
 

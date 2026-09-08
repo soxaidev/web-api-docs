@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.2",
+  "openapi": "3.1.0",
   "info": {
     "title": "SOXAI API",
     "description": "\n\n## SOXAI API helps you get data stored in SOXAI database.\nEvery endpoint below documents its own parameters, responses and authorization rule.\n\n## How to use\n1. All data-related endpoints need you to sign in first. Use the account you registered in the SOXAI app.\n\n2. You can get a Bearer token and localID like this:\n    ```\n    {\n    \"kind\": \"identitytoolkit#VerifyPasswordResponse\",\n    \"registered\": true,\n    \"localId\": \"[YOUR UID]\",\n    \"email\": \"[YOUR EMAIL]\",\n    \"idToken\": \"[YOUR BEARER TOKEN]\",\n    \"refreshToken\": [YOUR Refresh TOKEN]\"\n    }\n    ```\n    use this `idToken` to fill it into the value field after you click **Authorize** button, or attach it to header in your request. For more info, search for \"Bearer token\".\n    (ps. the difference between idToken and refreshToken: idToken will expire in 1 hour, refreshToken will expire in one month, you can use refreshToken to get new idToken when idToken expired.)\n3. All users can access to his/her personal data with `localId` as user's uid.\n\n4. If you are an organization admin, contact SOXAI first to create an organization.\n\n5. After the organization is created, you can invite other users to join it. They receive an email to accept the invitation.\n\n6. As an organization user, you can read your own data, plus the roster and profiles of your organization. Other members' measurement data is not yours to read - that is what an organization admin does. See \"Who can read whose data\" below.\n\n## Quick start note for personal user\n1. (Only once) Access `/api/login` to get your uid and OAuthToken by api, please memo OAuthToken, you can use it to access api without login again.\n2. Access `/api/v2/DailyInfoData/{query_uid}` for day-level scores, or\n   `/api/v2/DailyDetailData/{query_uid}` for the finer series. Both take a date range and\n   return JSON, or a csv download when `format` is `csv`.\n3. The v1 forms `/api/RawData/{query_uid}`, `/api/DailyInfoData/{query_uid}` and\n   `/api/DailyDetailData/{query_uid}` return the same measurements under the raw database\n   field names. Prefer the `/api/v2/` endpoints for a new integration.\n\n## Quick start note for organization user\n1. You will receive an email to accept the invitation from your organization admin. After you accept it, your data is shared with that admin.\n2. If you want to query your own data, you can refer to the note for personal user.\n3. You can query other orguser's info(email, uid, etc) after obtain your org_id from `/api/myOrg` and access `/api/orgs/{org_id}/orgUsers`\n\n\n## Quick start note for organization admin\n1. Contact SOXAI (info@soxai.co.jp) to create an organization for you.\n2. Access `/api/login` to get your uid and OAuthToken by api.\n3. Access `/api/myOrg` to get your organization id.\n4. Access `/api/orgs/{org_id}/orgUsers` to create, read, update and delete organization users. When you post a new user, they receive an email to accept the invitation.\n5. Access `/api/v2/DailyInfoDataForOrg` or `/api/v2/DailyDetailDataForOrg` to read your\n   organization's members in one request. **You reach the SOXAI app data of the users who\n   have agreed to share it**, and the endpoint narrows the answer to that set for you.\n\n\n## Authentication and errors common to every endpoint\n\nUnless an endpoint says otherwise, it requires `Authorization: Bearer <idToken>` and answers:\n\n| Status | Condition |\n| --- | --- |\n| 401 | The `Authorization` header is missing, or the token is invalid or expired |\n| 403 | The caller is authenticated but not allowed to make this request. Each endpoint's **Authorization** block lists the bodies it uses |\n| 422 | The request did not match the schema. An **authorized** caller sees this instead of a 403; an unauthorized caller is refused before its body is read |\n| 500 | Unexpected server-side failure |\n\nEach endpoint documents only the statuses that are specific to it.\n\nThe **Authorization** block is the last section of every endpoint's description. For the\nendpoints that declare their rule on the route it is generated from that declaration, so it\ncannot disagree with what is enforced.\n\n### The second credential\n\n`soxai-api-key: <key>` is accepted wherever `Authorization: Bearer <idToken>` is. The\ndifference is lifetime and who issues it: an ID token expires in an hour and you mint it\nyourself from `POST /api/login`, while an API key is long-lived and read back from\n`GET /api-key/secret`. A request carries one or the other, not both. Server-to-server\nintegrations should hold the key; anything acting on behalf of a signed-in person should\nhold the token, so that revoking the person's access is enough to stop it.\n\n### Who can read whose data\n\nWhich role you hold decides how far past your own uid you can read. A role is a claim on\nyour credential, not something you pass as a parameter.\n\n| Role | Reaches |\n| --- | --- |\n| (none) | Only your own uid. Every user has this much |\n| `OrgUser` | Your own uid, plus your organization's roster and member profiles (email, uid, profile) - not other members' measurement data |\n| `OrgAdmin` | Every member of your own organization, including their measurement data |\n| `PartnerAdmin` | Every organization owned by your own company, and every member of those organizations |\n| `Admin` | Every user, with no company or organization scoping. Held by SOXAI only |\n\nOne consequence catches integrators out: the roster an admin reaches is the whole roster,\nnot only its active part. A membership's `status` records where a member stands in the\ninvitation lifecycle; it does not by itself narrow what an admin can read. Do not infer a\nmember's data scope from their `status` - read the endpoint's **Authorization** block,\nwhich states the rule that is actually enforced.\n\n### v1 and v2\n\nThe data endpoints come in two generations. `/api/v2/...` returns standardized field\nnames and is the interface to build against. The v1 endpoints (`/api/RawData`,\n`/api/DailyInfoData`, `/api/DailyDetailData`) return the raw database field names, which\nchange when the database does. They are not deprecated and they are not going away\nwithout notice, but they will not gain fields that v2 has; a new integration should use\nv2.\n",
@@ -4754,7 +4754,7 @@
           "OAuth2"
         ],
         "summary": "Show the OAuth2 login page",
-        "description": "Render the SOXAI login page that starts the OAuth2 authorization code\nflow. A third-party client sends the user's browser here.\n\nThe request is validated against the client registration before the page is shown: an unknown\n`client_id`, a `redirect_uri` that is not the registered one, or a `scope` wider than the\nclient was granted are all refused rather than rendered.\n\n**Parameters**\n\n- `client_id` (query, required) - the registered OAuth2 client.\n- `redirect_uri` (query, required) - must equal the URI registered for that client.\n- `scope` (query, required) - must be a subset of the scope registered for that client.\n- `state` / `nonce` (query, optional) - passed through to the redirect.\n\n**Response**\n\n- `200` returns the login page as HTML. The flow continues at `POST /oauth2/authorization`.\n\n**Errors**\n\n| Status | Condition |\n| --- | --- |\n| 400 | `redirect_uri` does not match the registration, or `scope` exceeds what the client may request |\n| 404 | `client_id` is not registered |\n\n**Authorization**\n\n- No authentication. This is part of the OAuth2 authorization flow, which runs before the\n  caller has a SOXAI token.",
+        "description": "Render the SOXAI login page that starts the OAuth2 authorization code\nflow. A third-party client sends the user's browser here.\n\nThe request is validated against the client registration before the page is shown: an unknown\n`client_id`, a `redirect_uri` that is not the registered one, or a `scope` wider than the\nclient was granted are all refused rather than rendered.\n\n**Parameters**\n\n- `client_id` (query, required) - the registered OAuth2 client.\n- `redirect_uri` (query, required) - must equal the URI registered for that client.\n- `scope` (query, required) - must be a subset of the scope registered for that client.\n- `state` / `nonce` (query, optional) - passed through to the redirect.\n\n**Response**\n\n- `200` returns the login page as HTML. After successful sign-in, the browser continues\n  through the authorization flow.\n\n**Errors**\n\n| Status | Condition |\n| --- | --- |\n| 400 | `redirect_uri` does not match the registration, or `scope` exceeds what the client may request |\n| 404 | `client_id` is not registered |\n\n**Authorization**\n\n- No authentication. This is part of the OAuth2 authorization flow, which runs before the\n  caller has a SOXAI token.",
         "operationId": "oauth2_login",
         "parameters": [
           {
@@ -4825,7 +4825,7 @@
         ],
         "responses": {
           "200": {
-            "description": "The login page, as HTML. The flow continues at POST /oauth2/authorization.",
+            "description": "The login page, as HTML. After successful sign-in, the browser continues through the authorization flow.",
             "content": {
               "text/html": {
                 "schema": {
@@ -8475,10 +8475,10 @@
             "type": "string",
             "description": "Issued API key.",
             "default": "readonly",
-            "read_only": true,
             "examples": [
               "<api-key>"
-            ]
+            ],
+            "read_only": true
           },
           "apikey_expires": {
             "title": "Expire Date",
@@ -8946,10 +8946,10 @@
             "type": "string",
             "description": "Server-assigned organization ID.",
             "default": "readonly",
-            "read_only": true,
             "examples": [
               "org_123"
-            ]
+            ],
+            "read_only": true
           },
           "orgName": {
             "title": "Organization Name",
@@ -8987,10 +8987,10 @@
             "title": "Company Id",
             "type": "string",
             "description": "Owning company ID when assigned.",
-            "read_only": true,
             "examples": [
               "company_123"
-            ]
+            ],
+            "read_only": true
           }
         }
       },

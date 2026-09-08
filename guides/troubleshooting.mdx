@@ -27,7 +27,7 @@ To stop an organization from receiving a member's shared data, update that organ
 
 `PUT /api/orgs/{org_id}/orgUsers/{uid}`
 
-Set `allowDataSharing` to `false` in the request body. This is an organization-membership update, not a deletion of the user's account.
+Set the `allowDataSharing` query parameter to `false` and send the required organization-member fields in the request body. `allowDataSharing` is not a request-body field. This is an organization-membership update, not a deletion of the user's account.
 
 ## Understand validation errors
 

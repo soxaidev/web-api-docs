@@ -11,7 +11,7 @@ This changelog versions the public API documentation as a whole. Its version is 
 - **MINOR**: a backward-compatible addition, including a new endpoint, optional parameter, response field, role, or public operation.
 - **PATCH**: a behavior-preserving correction, including documentation, example, or tag-description fixes.
 
-Response fields can be added in a MINOR release. Clients should ignore fields they do not recognize. Adding `x-internal` is MINOR; removing it is MAJOR because it removes a public operation.
+Response fields can be added in a MINOR release. Clients should ignore fields they do not recognize. Adding `x-internal` is MAJOR because it removes a public operation; removing it is MINOR because it adds a public operation.
 
 ## [1.0.0] - 2026-09-08
 
