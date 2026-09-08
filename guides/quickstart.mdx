@@ -42,7 +42,9 @@ Keep requests within the limits below and divide larger exports into multiple re
 
 The v1 single-user data endpoints do not currently enforce a date-range maximum. Still divide large v1 exports into manageable periods to avoid long-running requests.
 
-For organization-wide JSON requests, a result that fits on one page is returned as an array. When more than one page is required, the response is an object whose `data` key contains the records and whose `pagination` key contains the paging metadata. Continue requesting successive page numbers until `data` contains fewer than 100 records. When `uid_list` is provided, `page` is ignored.
+For organization-wide JSON requests, pagination is based on users, not measurement records. A successful result for at most 100 eligible users is an array. With more users, it is an object containing `data` and `pagination`. The metadata contains `total_users`, `total_pages`, `current_page` (zero-based), and `page_size` (100 users). Request the next page while `pagination.current_page + 1 < pagination.total_pages`. A user can contribute many records or none, so neither the record count nor an empty data result determines the last page.
+
+If a requested page has no measurements, the API can return `{"msg":"No data found"}` without pagination metadata. Continue using a previously obtained `total_pages`; if none is available, this response alone cannot tell you how many pages remain. For predictable bulk exports, send explicit batches of at most 100 eligible user IDs with `uid_list`. With a non-empty `uid_list`, `page` is ignored. See the [organization summary reference](/api-reference/data-v2/fetch-daily-summary-data-for-a-whole-organization-or-company-v2) and [organization detail reference](/api-reference/data-v2/fetch-intra-day-detail-data-for-a-whole-organization-or-company-v2).
 
 All three v1 data endpoints and the five v2 data endpoints support `format=csv`. `GET /api/v2/GroupView/{group_id}` does not support CSV.
 

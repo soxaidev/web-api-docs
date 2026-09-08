@@ -27,7 +27,17 @@ To stop an organization from receiving a member's shared data, update that organ
 
 `PUT /api/orgs/{org_id}/orgUsers/{uid}`
 
-Set the `allowDataSharing` query parameter to `false` and send the required organization-member fields in the request body. `allowDataSharing` is not a request-body field. This is an organization-membership update, not a deletion of the user's account.
+Set the `allowDataSharing` query parameter to `false` and send an empty JSON object (`{}`) as the required request body:
+
+```bash
+curl --request PUT \
+  'https://web-api.soxai.site/api/orgs/YOUR_ORG_ID/orgUsers/YOUR_UID?allowDataSharing=false' \
+  --header 'Authorization: Bearer YOUR_ID_TOKEN' \
+  --header 'Content-Type: application/json' \
+  --data '{}'
+```
+
+No organization-member fields are required inside the body. Omit `username`, `teams`, and `isAdmin` when only withdrawing consent, because supplied fields also update the membership. This does not delete the user's account.
 
 ## Understand validation errors
 

@@ -3756,7 +3756,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Daily info data fetched successfully with renamed fields. A json request answers with an array, wrapped in pagination / data keys when the org needs more than one page; when nothing matches, the body is the No data found message. format=csv answers with a file download.",
+            "description": "Daily info data fetched successfully with renamed fields. A json request answers with an array, wrapped in pagination / data keys when the org needs more than one page; when nothing matches, the body is the No data found message. format=csv answers with a file download.\n\nPagination counts eligible users, not measurement records. `pagination` contains `total_users`, `total_pages`, `current_page` (zero-based), and `page_size` (100 users). For example, 105 users on page 1 produce metadata `{\"total_users\":105,\"total_pages\":2,\"current_page\":1,\"page_size\":100}`. Request another page while `current_page + 1 < total_pages`, regardless of record count. A non-empty `uid_list` disables pagination. A page without measurements can return `{\"msg\":\"No data found\"}` without metadata, even if more pages exist. Use a previously obtained total_pages or explicit uid_list batches; this message alone cannot determine the final page. An out-of-range page returns metadata and `data: []`.",
             "content": {
               "application/json": {
                 "schema": {},
@@ -4013,7 +4013,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Daily detail data fetched successfully with renamed fields. A json request answers with an array, wrapped in pagination / data keys when the org needs more than one page; when nothing matches, the body is the No data found message. format=csv answers with a file download.",
+            "description": "Daily detail data fetched successfully with renamed fields. A json request answers with an array, wrapped in pagination / data keys when the org needs more than one page; when nothing matches, the body is the No data found message. format=csv answers with a file download.\n\nPagination counts eligible users, not measurement records. `pagination` contains `total_users`, `total_pages`, `current_page` (zero-based), and `page_size` (100 users). For example, 105 users on page 1 produce metadata `{\"total_users\":105,\"total_pages\":2,\"current_page\":1,\"page_size\":100}`. Request another page while `current_page + 1 < total_pages`, regardless of record count. A non-empty `uid_list` disables pagination. A page without measurements can return `{\"msg\":\"No data found\"}` without metadata, even if more pages exist. Use a previously obtained total_pages or explicit uid_list batches; this message alone cannot determine the final page. An out-of-range page returns metadata and `data: []`.",
             "content": {
               "application/json": {
                 "schema": {},
@@ -8475,10 +8475,10 @@
             "type": "string",
             "description": "Issued API key.",
             "default": "readonly",
+            "readOnly": true,
             "examples": [
               "<api-key>"
-            ],
-            "read_only": true
+            ]
           },
           "apikey_expires": {
             "title": "Expire Date",
@@ -8946,10 +8946,10 @@
             "type": "string",
             "description": "Server-assigned organization ID.",
             "default": "readonly",
+            "readOnly": true,
             "examples": [
               "org_123"
-            ],
-            "read_only": true
+            ]
           },
           "orgName": {
             "title": "Organization Name",
@@ -8987,10 +8987,10 @@
             "title": "Company Id",
             "type": "string",
             "description": "Owning company ID when assigned.",
+            "readOnly": true,
             "examples": [
               "company_123"
-            ],
-            "read_only": true
+            ]
           }
         }
       },
