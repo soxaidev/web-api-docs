@@ -1,0 +1,57 @@
+name: Validate documentation
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate OpenAPI JSON and changelog version
+        run: |
+          python - <<'PY'
+          import json
+          import re
+          from pathlib import Path
+
+          spec = json.loads(Path("openapi-public.json").read_text())
+          if spec.get("openapi") != "3.1.0":
+              raise SystemExit("The generated specification must declare OpenAPI 3.1.0.")
+          login = spec.get("paths", {}).get("/oauth2/login", {}).get("get", {})
+          if "/oauth2/authorization" in json.dumps(login):
+              raise SystemExit("OAuth2 login must not direct readers to the internal operation.")
+          for mdx in sorted(Path(".").glob("**/*.mdx")):
+              visible = re.sub(r"\{/\*.*?\*/\}", "", mdx.read_text(), flags=re.DOTALL)
+              for token in ("FORM_ID", "PRIVACY_POLICY_URL"):
+                  if token in visible:
+                      raise SystemExit(
+                          f"{mdx}: the {token} placeholder must stay inside an MDX comment."
+                      )
+          version = spec["info"]["version"]
+          changelog = Path("changelog.mdx").read_text()
+          latest_heading = re.search(r"^## \[([^\]]+)\]", changelog, re.MULTILINE)
+          if latest_heading is None:
+              raise SystemExit("changelog.mdx must contain a version heading.")
+          if latest_heading.group(1) != version:
+              raise SystemExit(
+                  "The latest changelog version must match openapi-public.json info.version."
+              )
+          PY
+
+      - name: Validate with Mintlify
+        run: |
+          npm install --global mint@4.2.876
+          mint validate
+          mint broken-links
