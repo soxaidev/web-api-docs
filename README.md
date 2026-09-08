@@ -6,9 +6,9 @@ Run `mint dev` for a local preview and `mint validate` before publishing changes
 
 ## Support and access
 
-The production-access form is pending configuration. `support.mdx` retains its embed template inside an MDX comment, so it is not rendered or loaded while unconfigured. Production-access applications will use that private form; API usage questions go to `info@soxai.co.jp` until the public discussions forum is available.
+The production-access form is pending configuration. `support.mdx` retains its embed template inside an MDX comment, so it is not rendered or loaded while unconfigured. MDX placeholders must use `{/* */}` comments; HTML comments do not protect them from the validation check. Production-access applications temporarily use `info@soxai.co.jp` with the subject `Production access request`. API usage questions use the same address until the public discussions forum is available.
 
-Before enabling the Google Form, replace `FORM_ID` with its actual form ID, confirm the applicable privacy-policy URL, remove the surrounding MDX comment markers, and replace the preparation notice with an invitation to apply. Keep the Google-processing disclosure and verify a test submission reaches the intended recipient. The form publication requirement remains incomplete until then.
+Before enabling the Google Form, replace `FORM_ID` with its actual form ID, confirm the applicable privacy-policy URL, remove the surrounding MDX comment markers, replace the preparation notice with an invitation to apply, and remove the temporary email application instructions from both support sections. Keep the Google-processing disclosure and verify a test submission reaches the intended recipient. The form publication requirement remains incomplete until then.
 
 ## OpenAPI updates
 
