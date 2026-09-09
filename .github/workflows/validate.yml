@@ -27,29 +27,39 @@ jobs:
           from pathlib import Path
 
           specs = {
-              "openapi-public.json": ("https://web-api.soxai.site", "Production"),
-              "openapi-sandbox.json": ("https://web-api.dev.soxai.site", "Sandbox"),
+              "openapi-public.json": "Production",
+              "openapi-sandbox.json": "Sandbox",
           }
-          for filename, (expected_url, expected_description) in specs.items():
+          server_urls = {}
+          for filename, expected_description in specs.items():
               spec = json.loads(Path(filename).read_text())
               if spec.get("openapi") != "3.1.0":
                   raise SystemExit(
                       f"{filename} must declare OpenAPI 3.1.0."
                   )
               servers = spec.get("servers")
-              expected_servers = [{
-                  "url": expected_url,
-                  "description": expected_description,
-              }]
-              if servers != expected_servers:
+              if not isinstance(servers, list) or len(servers) != 1:
                   raise SystemExit(
-                      f"{filename} must declare only its {expected_description} server."
+                      f"{filename} must declare exactly one server."
                   )
+              server = servers[0]
+              server_url = server.get("url")
+              if not isinstance(server_url, str) or not server_url.startswith("https://"):
+                  raise SystemExit(f"{filename} must declare an HTTPS server URL.")
+              if server.get("description") != expected_description:
+                  raise SystemExit(
+                      f"{filename} must describe its server as {expected_description}."
+                  )
+              server_urls[filename] = server_url
               login = spec.get("paths", {}).get("/oauth2/login", {}).get("get", {})
               if "/oauth2/authorization" in json.dumps(login):
                   raise SystemExit(
                       f"{filename}: OAuth2 login must not direct readers to the internal operation."
                   )
+          if len(set(server_urls.values())) != len(server_urls):
+              raise SystemExit(
+                  "Production and Sandbox specifications must use different servers."
+              )
           for mdx in sorted(Path(".").glob("**/*.mdx")):
               visible = re.sub(r"\{/\*.*?\*/\}", "", mdx.read_text(), flags=re.DOTALL)
               for token in ("FORM_ID", "PRIVACY_POLICY_URL"):

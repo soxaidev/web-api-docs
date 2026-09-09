@@ -3,10 +3,18 @@ title: "Rate limits"
 description: "Write integrations that use the SOXAI API fairly and reliably."
 ---
 
-The SOXAI API does not currently enforce a documented request-rate limit. This does not mean that an integration should send unlimited concurrent requests.
+## Sandbox
+
+Sandbox credentials allow up to **10 requests per minute** and **300 requests per day**.
+
+## Production
+
+The Production API does not currently have a documented request-rate limit. This does not mean that an integration should send unlimited concurrent requests.
+
+## Handle limits and retries
 
 Split large data retrievals by the [documented request sizes](/guides/quickstart#request-sizes-and-pagination), process each page before requesting the next one, and avoid retry loops that immediately repeat a failed request.
 
-SOXAI plans to introduce explicit limits. Build clients now so they handle `429 Too Many Requests` and honor the `Retry-After` header when it is present. Doing so prevents a future limit from requiring a client redesign.
+Build clients so they handle `429 Too Many Requests` and honor the `Retry-After` header when it is present. Doing so avoids a client redesign if Production introduces explicit limits in the future.
 
 For transient server failures, use bounded exponential backoff with jitter. Do not retry authentication (`401`) or authorization (`403`) failures until the credential or access scope has been corrected.
