@@ -1,0 +1,40 @@
+---
+title: "Sandbox"
+description: "Create a Sandbox credential and test the SOXAI API with fixed sample data."
+---
+
+The Sandbox runs the `staging` version of the SOXAI API at `https://web-api.dev.soxai.site`. Use it to evaluate an integration before requesting Production access.
+
+<Warning>
+  Sandbox endpoints are under development. They may change or be removed without notice, and they may never be released to Production. Sandbox changes are not included in the Production [changelog](/changelog).
+</Warning>
+
+## Create a Sandbox credential
+
+1. Open the [Sandbox credential page](https://web-api.dev.soxai.site/api-keys).
+2. Register an email address and follow the verification link sent to that address.
+3. Sign in with the verified account and issue an API key.
+4. Copy the key when it is displayed and store it in a secret manager. Do not put it in browser code, source control, logs, support tickets, or email.
+5. Send it in the `soxai-api-key` request header when using the [Sandbox API reference](/sandbox-api-reference/authentication/sign-in-and-obtain-an-id-token).
+
+Sandbox and Production credentials are separate. A Sandbox API key or ID token cannot authenticate against Production, and a Production credential cannot authenticate against Sandbox.
+
+## Data and behavior
+
+Sandbox data is fixed test data. It is not customer data and must not be used to evaluate the freshness, completeness, or real-world distribution of Production data.
+
+The Sandbox and Production API schemas are documented separately because `staging` can contain endpoints that are not yet released. Even when their schemas match, some externally visible behavior is intentionally different:
+
+- Deep links can redirect to different destinations.
+- Email sender details and URLs in email messages can differ.
+- Sandbox rate limits are lower than Production limits.
+
+Sandbox is also used for internal validation. Its behavior is not guaranteed to match Production beyond the contract shown in the Sandbox API reference.
+
+## Rate limits
+
+Sandbox credentials allow up to **10 requests per minute** and **300 requests per day**. When the API returns `429 Too Many Requests`, wait for the period indicated by `Retry-After` before retrying. See [Rate limits](/guides/rate-limits) for retry guidance.
+
+## Move to Production
+
+When your integration is ready, [request Production access](/support#request-production-access). Production access is reviewed separately and requires a Production credential.

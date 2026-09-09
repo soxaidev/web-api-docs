@@ -26,12 +26,30 @@ jobs:
           import re
           from pathlib import Path
 
-          spec = json.loads(Path("openapi-public.json").read_text())
-          if spec.get("openapi") != "3.1.0":
-              raise SystemExit("The generated specification must declare OpenAPI 3.1.0.")
-          login = spec.get("paths", {}).get("/oauth2/login", {}).get("get", {})
-          if "/oauth2/authorization" in json.dumps(login):
-              raise SystemExit("OAuth2 login must not direct readers to the internal operation.")
+          specs = {
+              "openapi-public.json": ("https://web-api.soxai.site", "Production"),
+              "openapi-sandbox.json": ("https://web-api.dev.soxai.site", "Sandbox"),
+          }
+          for filename, (expected_url, expected_description) in specs.items():
+              spec = json.loads(Path(filename).read_text())
+              if spec.get("openapi") != "3.1.0":
+                  raise SystemExit(
+                      f"{filename} must declare OpenAPI 3.1.0."
+                  )
+              servers = spec.get("servers")
+              expected_servers = [{
+                  "url": expected_url,
+                  "description": expected_description,
+              }]
+              if servers != expected_servers:
+                  raise SystemExit(
+                      f"{filename} must declare only its {expected_description} server."
+                  )
+              login = spec.get("paths", {}).get("/oauth2/login", {}).get("get", {})
+              if "/oauth2/authorization" in json.dumps(login):
+                  raise SystemExit(
+                      f"{filename}: OAuth2 login must not direct readers to the internal operation."
+                  )
           for mdx in sorted(Path(".").glob("**/*.mdx")):
               visible = re.sub(r"\{/\*.*?\*/\}", "", mdx.read_text(), flags=re.DOTALL)
               for token in ("FORM_ID", "PRIVACY_POLICY_URL"):
@@ -39,7 +57,8 @@ jobs:
                       raise SystemExit(
                           f"{mdx}: the {token} placeholder must stay inside an MDX comment."
                       )
-          version = spec["info"]["version"]
+          public_spec = json.loads(Path("openapi-public.json").read_text())
+          version = public_spec["info"]["version"]
           changelog = Path("changelog.mdx").read_text()
           latest_heading = re.search(r"^## \[([^\]]+)\]", changelog, re.MULTILINE)
           if latest_heading is None:

@@ -21,6 +21,7 @@
         "group": "Get started",
         "pages": [
           "guides/quickstart",
+          "guides/sandbox",
           "guides/authentication",
           "guides/rate-limits",
           "guides/data-fields",
@@ -28,8 +29,18 @@
         ]
       },
       {
-        "group": "Reference",
-        "openapi": "openapi-public.json"
+        "group": "API Reference (Sandbox)",
+        "openapi": {
+          "source": "openapi-sandbox.json",
+          "directory": "sandbox-api-reference"
+        }
+      },
+      {
+        "group": "API Reference (Production)",
+        "openapi": {
+          "source": "openapi-public.json",
+          "directory": "api-reference"
+        }
       },
       {
         "group": "About",

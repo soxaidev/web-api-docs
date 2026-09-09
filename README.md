@@ -12,7 +12,14 @@ Before enabling the Google Form, replace `FORM_ID` with its actual form ID, conf
 
 ## OpenAPI updates
 
-`openapi-public.json` is generated from the web-api repository. Make schema and endpoint-description changes there, then regenerate with `python scripts/export_openapi.py --public --output openapi-public.json`. Do not maintain separate corrections in this repository. The publishing workflow replaces this artifact on subsequent releases.
+`openapi-public.json` and `openapi-sandbox.json` are generated from the web-api repository. Make schema and endpoint-description changes there, then regenerate the appropriate artifact:
+
+```bash
+python scripts/export_openapi.py --public --target production --output openapi-public.json
+python scripts/export_openapi.py --public --target sandbox --output openapi-sandbox.json
+```
+
+Do not maintain separate schema corrections in this repository. The publishing workflows replace the Production artifact from the `release` branch and the Sandbox artifact from the `staging` branch.
 
 ## License and trademarks
 
