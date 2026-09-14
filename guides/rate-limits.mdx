@@ -1,20 +1,66 @@
 ---
 title: "Rate limits"
-description: "Write integrations that use the SOXAI API fairly and reliably."
+description: "Understand the SOXAI API request limits and build clients that handle them."
 ---
 
-## Sandbox
+Every request is counted against two limits at the same time: a per-minute limit and a per-day limit. A request is rejected with `429 Too Many Requests` when either limit is exhausted.
 
-Sandbox credentials allow up to **10 requests per minute** and **300 requests per day**.
+| Environment | Per minute | Per day |
+| --- | ---: | ---: |
+| Production | 60 requests | 20,000 requests |
+| Sandbox | 10 requests | 300 requests |
 
-## Production
+Limits are enforced from the first request. There is no warm-up or grace period.
 
-The Production API does not currently have a documented request-rate limit. This does not mean that an integration should send unlimited concurrent requests.
+## How the allowance recovers
 
-## Handle limits and retries
+Both limits refill continuously rather than resetting at a fixed clock time. The allowance you spend comes back gradually over the length of its period: the per-minute allowance refills over 60 seconds, and the per-day allowance refills over 24 hours.
 
-Split large data retrievals by the [documented request sizes](/guides/quickstart#request-sizes-and-pagination), process each page before requesting the next one, and avoid retry loops that immediately repeat a failed request.
+There is no daily reset time to wait for and no midnight boundary to schedule around. A client that spreads requests evenly is never blocked by the per-day limit, and a client that exhausts it recovers a usable allowance within minutes instead of waiting for the next day.
 
-Build clients so they handle `429 Too Many Requests` and honor the `Retry-After` header when it is present. Doing so avoids a client redesign if Production introduces explicit limits in the future.
+## Which limit applies to you
 
-For transient server failures, use bounded exponential backoff with jitter. Do not retry authentication (`401`) or authorization (`403`) failures until the credential or access scope has been corrected.
+Requests that send an API key in the `soxai-api-key` header are counted per API key. The key's allowance is yours alone, so a shared or changing network address does not affect it.
+
+Requests that are not authenticated with an API key — including requests that use an ID token from `POST /api/login` — are counted per client IP address. Anything else sending requests from the same address consumes the same allowance. **Use an API key for server-side integrations** so that your allowance is not shared.
+
+Sandbox and Production allowances are tracked separately. Consuming the Sandbox allowance has no effect on Production.
+
+## Response headers
+
+Every rate-limited response carries the current state of both limits. The `-Day` headers describe the per-day limit; the headers without a suffix describe the per-minute limit.
+
+| Header | Meaning |
+| --- | --- |
+| `X-RateLimit-Limit` | Maximum requests per minute |
+| `X-RateLimit-Remaining` | Requests still available this minute |
+| `X-RateLimit-Reset` | Unix time (seconds) at which the per-minute allowance is fully restored |
+| `X-RateLimit-Limit-Day` | Maximum requests per day |
+| `X-RateLimit-Remaining-Day` | Requests still available today |
+| `X-RateLimit-Reset-Day` | Unix time (seconds) at which the per-day allowance is fully restored |
+
+Because the allowance refills continuously, the `Reset` values are the times at which the allowance reaches its *maximum*, not the times at which the next request becomes possible. Requests usually become possible well before then. To decide when to retry, use `Retry-After` rather than the `Reset` headers.
+
+## Handling `429`
+
+A rejected request returns `429` with a `Retry-After` header giving the whole number of seconds to wait, and a body in the standard error shape:
+
+```json
+{
+  "error": "rate-limited",
+  "error_msg": "Rate limit exceeded. Retry after 3 seconds."
+}
+```
+
+Wait at least `Retry-After` seconds before repeating the request. Do not retry immediately, and do not run parallel retry loops — both consume allowance that would otherwise refill.
+
+A `429` means the request was not processed. It is safe to repeat it.
+
+## Staying within the limits
+
+- Read `X-RateLimit-Remaining` and `X-RateLimit-Remaining-Day` and slow down before you reach zero, instead of waiting for a `429`.
+- Split large retrievals by the [documented request sizes](/guides/quickstart#request-sizes-and-pagination), and process each page before requesting the next one. Batch endpoints that accept a `uid_list` retrieve many users in a single request and consume far less allowance than one request per user.
+- Send requests sequentially. Concurrency does not raise the ceiling; it only reaches it sooner.
+- For transient server failures, use bounded exponential backoff with jitter. Do not retry authentication (`401`) or authorization (`403`) failures until the credential or access scope has been corrected.
+
+If your integration needs a higher limit, describe the workload in a [production access request](/support#request-production-access).
