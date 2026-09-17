@@ -1,0 +1,62 @@
+---
+title: "Get a Sandbox API key"
+description: "Register an email address and issue an API key for the SOXAI API Sandbox."
+---
+
+import { SandboxRegistrationForm, SandboxKeyManager } from "/snippets/sandbox-key-form.jsx";
+
+This page issues credentials for the **Sandbox** only (`https://web-api.dev.soxai.site`). A Sandbox key never authenticates against Production. To use Production, [request access](/support#request-production-access).
+
+<Steps>
+  <Step title="Register an email address">
+    The Sandbox identity is passwordless. Choose the role it should hold, and a verification link is emailed to you. The link is valid for 60 minutes.
+
+    <SandboxRegistrationForm />
+  </Step>
+
+  <Step title="Open the link in the email">
+    The link issues your first API key and displays it once. **Copy it before closing that page** - the key is stored as a hash and cannot be shown again. The link itself stays usable until it expires, so keep it for the next step.
+
+    Send the key in the `soxai-api-key` request header:
+
+    ```bash
+    curl -G 'https://web-api.dev.soxai.site/api/v2/DailyInfoData/SANDBOX_UID' \
+      --data-urlencode 'start_day=2026-01-01' \
+      --data-urlencode 'end_day=2026-01-31' \
+      -H 'soxai-api-key: YOUR_SANDBOX_KEY'
+    ```
+
+    <Note>
+      Replace `SANDBOX_UID` with the shared Sandbox data UID. Every Sandbox key reads
+      the same fixed dataset, so the UID is the same for everyone.
+    </Note>
+  </Step>
+
+  <Step title="Manage your keys">
+    Paste the same verification link below to list, issue, or revoke keys for that registration. The link is the credential for these operations, and it stays valid for 60 minutes after the email is sent. After that, register the same address again to get a new one.
+
+    <SandboxKeyManager />
+  </Step>
+</Steps>
+
+## Limits
+
+| | |
+| --- | --- |
+| Key lifetime | 30 days from issue |
+| Keys per email address | 2 active at a time |
+| Rate limit | 10 requests per minute, 300 per day |
+
+Revoke a key to free a slot. Registration is refused with `409` while both slots are in use.
+
+<Warning>
+  Treat a Sandbox key as a secret even though the data behind it is test data. Do not put it in browser code, source control, logs, support tickets, or email.
+</Warning>
+
+## What a Sandbox key can do
+
+A Sandbox key reads **fixed test data** through the read-only endpoints listed in the Sandbox API reference. Anything that writes - creating organizations, inviting members, issuing certificates, sending email - answers `403 This endpoint is not available in the sandbox.` even though it appears in the reference.
+
+A Sandbox identity also authenticates with the `soxai-api-key` header only. A Firebase ID token issued to a Sandbox account is refused with `403`.
+
+See [Sandbox](/guides/sandbox) for how Sandbox behavior differs from Production.

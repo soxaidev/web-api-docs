@@ -22,6 +22,7 @@
         "pages": [
           "guides/quickstart",
           "guides/sandbox",
+          "guides/sandbox-api-key",
           "guides/authentication",
           "guides/rate-limits",
           "guides/data-fields",
