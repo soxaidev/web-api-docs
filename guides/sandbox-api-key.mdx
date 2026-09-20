@@ -18,20 +18,41 @@ This page issues credentials for the **Sandbox** only (`https://web-api.dev.soxa
     The link issues your API key and displays it once. **Copy it before closing that page** - the key is stored as a hash, so nothing, including this site, can show it to you again. Lose it and you register again for a new one.
   </Step>
 
-  <Step title="Call the Sandbox with the key">
-    Send the key in the `soxai-api-key` request header:
+  <Step title="Look up your uid and org_id">
+    Data endpoints take a UID in the path, and org-scoped endpoints take an `org_id`.
+    Both come from `GET /api/myOrg`, which reads them from the key itself and takes no
+    parameter. Call it first:
 
     ```bash
-    curl -G 'https://web-api.dev.soxai.site/api/v2/DailyInfoData/SANDBOX_UID' \
+    curl 'https://web-api.dev.soxai.site/api/myOrg' \
+      -H 'soxai-api-key: YOUR_SANDBOX_KEY'
+    ```
+
+    ```json
+    {
+      "isOrgUser": true,
+      "uid": "user123",
+      "email": "you@example.com",
+      "myOrg": {
+        "orgId": "org_ab12cd34",
+        "orgName": "SOXAI Research"
+      }
+    }
+    ```
+
+    `uid` is your own UID and `myOrg.orgId` is the `org_id` every org-scoped endpoint takes.
+  </Step>
+
+  <Step title="Call the Sandbox with the key">
+    Send the key in the `soxai-api-key` request header, and use the UID from the previous
+    step in the path:
+
+    ```bash
+    curl -G 'https://web-api.dev.soxai.site/api/v2/DailyInfoData/user123' \
       --data-urlencode 'start_day=2026-01-01' \
       --data-urlencode 'end_day=2026-01-31' \
       -H 'soxai-api-key: YOUR_SANDBOX_KEY'
     ```
-
-    <Note>
-      Replace `SANDBOX_UID` with the shared Sandbox data UID. Every Sandbox key reads
-      the same fixed dataset, so the UID is the same for everyone.
-    </Note>
   </Step>
 </Steps>
 
