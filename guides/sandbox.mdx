@@ -11,11 +11,11 @@ The Sandbox runs the `staging` version of the SOXAI API at `https://web-api.dev.
 
 ## Create a Sandbox credential
 
-1. Open the [Sandbox credential page](https://web-api.dev.soxai.site/api-keys).
-2. Register an email address and follow the verification link sent to that address.
-3. Sign in with the verified account and issue an API key.
-4. Copy the key when it is displayed and store it in a secret manager. Do not put it in browser code, source control, logs, support tickets, or email.
-5. Send it in the `soxai-api-key` request header. See [Authentication](/guides/authentication) for credential-handling guidance, then choose an endpoint from the Sandbox API reference.
+Register an email address on [Get a Sandbox API key](/guides/sandbox-api-key). A link is
+emailed to you, and opening it issues your key and shows it once. Send the key in the
+`soxai-api-key` request header; see [Authentication](/guides/authentication) for
+credential-handling guidance. Registering the same address again replaces a key you
+have lost.
 
 Sandbox and Production credentials are separate. A Sandbox API key or ID token cannot authenticate against Production, and a Production credential cannot authenticate against Sandbox.
 
