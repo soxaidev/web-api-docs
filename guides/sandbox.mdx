@@ -60,10 +60,10 @@ Sandbox key** or **Not part of the Sandbox**, and says which of the two it is an
 - **Not callable with a Sandbox key.** The endpoint accepts the `soxai-api-key` header,
   but a Sandbox key is refused with `403 This endpoint is not available in the sandbox.`
   Anything that writes, sends email, or issues a credential is in this group, as are
-  reads that are internal or need an administrator role the Sandbox never grants.
+  reads outside the 15 above - such as listing organizations or groups and `/app/me`.
 - **Not part of the Sandbox.** The endpoint takes no API key at all - sign-in, the OAuth2
-  flow, the health checks, the partner-company routes. A Sandbox identity cannot complete
-  it, and its behavior here is not part of the Sandbox contract.
+  flow, the health checks, the partner-company routes. A Sandbox key plays no part in it,
+  and its behavior here is not part of the Sandbox contract.
 
 Both groups are documented in the Sandbox reference because the Sandbox runs the same
 build as Production. Use them in Production.
