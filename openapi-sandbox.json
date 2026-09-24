@@ -22558,7 +22558,7 @@
           "Family Groups"
         ],
         "summary": "Issue a group invite link",
-        "description": "Create an invite code for a group and return it as a deep link the\nrecipient can open.\n\nThe code is valid for **7 days** and can be used **10 times** by default; each accepted join\nconsumes one use.\n\n**Parameters**\n\n- `group_id` (path, required) - the group to invite into.\n\n**Response**\n\n- `200` returns the invite code, its expiry, and the deep link carrying both.\n\n**Errors**\n\n| Status | Condition |\n| --- | --- |\n| 404 | The group does not exist |\n\n**Authorization**\n\n- Scheme: `Authorization: Bearer <idToken>` or `soxai-api-key: <api key>`.\n- Authority inside a group comes from the caller's own membership record, never from a SOXAI\n  role: an `Admin`, `PartnerAdmin` or `OrgAdmin` claim grants nothing here.\n- Required: the `admin` role **of this group**. A non-member receives\n  `403 not a member of this group`, and a plain member `403 group admin required`.",
+        "description": "Create an invite code for a group and return it as a deep link the\nrecipient can open.\n\nThe code is valid for **7 days** and can be used **10 times** by default; each accepted join\nconsumes one use.\n\n**Parameters**\n\n- `group_id` (path, required) - the group to invite into.\n\n**Response**\n\n- `200` returns the invite code, its expiry, and the deep link carrying both.\n\nShare `deepLinkUrl` exactly as returned. It carries `openExternalBrowser=1`, which is how\nLINE is told to open the link in the system browser rather than its own in-app one — iOS\ndoes not fire a Universal Link for an in-app browser's page load, so a stripped link opens\nthe online shop instead of the app (SOX-117).\n\n**Errors**\n\n| Status | Condition |\n| --- | --- |\n| 404 | The group does not exist |\n\n**Authorization**\n\n- Scheme: `Authorization: Bearer <idToken>` or `soxai-api-key: <api key>`.\n- Authority inside a group comes from the caller's own membership record, never from a SOXAI\n  role: an `Admin`, `PartnerAdmin` or `OrgAdmin` claim grants nothing here.\n- Required: the `admin` role **of this group**. A non-member receives\n  `403 not a member of this group`, and a plain member `403 group admin required`.",
         "operationId": "issue_group_invite",
         "parameters": [
           {
@@ -22633,7 +22633,7 @@
                   "expiresAt": "2026-08-10T09:30:00+00:00",
                   "maxUses": 50,
                   "usedCount": 0,
-                  "deepLinkUrl": "https://link.soxai.co.jp/app-redirect?token=<token>&type=group_invite"
+                  "deepLinkUrl": "https://link.soxai.co.jp/app-redirect?token=<token>&type=group_invite&openExternalBrowser=1"
                 }
               }
             }
