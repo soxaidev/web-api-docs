@@ -31,6 +31,43 @@ The Sandbox and Production API schemas are documented separately because `stagin
 
 Sandbox is also used for internal validation. Its behavior is not guaranteed to match Production beyond the contract shown in the Sandbox API reference.
 
+## What a Sandbox key can call
+
+The Sandbox reference lists every operation the Sandbox build serves, but a Sandbox key
+reaches only these 15. They are all reads.
+
+| Endpoint | What it does |
+| --- | --- |
+| `GET /api/myOrg` | Get the caller's own organization |
+| `GET /api/orgs/{org_id}/orgUsers` | List an organization's members |
+| `GET /api/orgs/{org_id}/validOrgUsers/teamFilter` | List an organization's members filtered by team |
+| `GET /api/orgs/{org_id}/orgUsers/{uid}` | Get one organization member |
+| `GET /api/orgs/{org_id}/orgUsers/{uid}/UserProfile` | Get a member's user profile |
+| `GET /api/RawData/{query_uid}` | Download one user's raw ring records |
+| `GET /api/DailyInfoData/{query_uid}` | Download one user's daily summary data |
+| `GET /api/DailyDetailData/{query_uid}` | Download one user's intra-day detail data |
+| `GET /api/v2/DailyInfoData/{query_uid}` | Fetch one user's daily summary data (v2) |
+| `GET /api/v2/DailyDetailData/{query_uid}` | Fetch one user's intra-day detail data (v2) |
+| `GET /api/v2/DailyTrendData/{query_uid}` | Fetch one user's 7 / 14 / 30-day trend data (v2) |
+| `GET /api/v2/DailyInfoDataForOrg` | Fetch daily summary data for a whole organization or company (v2) |
+| `GET /api/v2/DailyDetailDataForOrg` | Fetch intra-day detail data for a whole organization or company (v2) |
+| `GET /api/LastProcessLog` | Get the last process log for a user or an organization |
+| `GET /api/users/sync-logs` | Get the caller's own ring sync logs |
+
+Every other operation in the Sandbox reference is titled either **Not callable with a
+Sandbox key** or **Not part of the Sandbox**, and says which of the two it is and why:
+
+- **Not callable with a Sandbox key.** The endpoint accepts the `soxai-api-key` header,
+  but a Sandbox key is refused with `403 This endpoint is not available in the sandbox.`
+  Anything that writes, sends email, or issues a credential is in this group, as are
+  reads outside the 15 above - such as listing organizations or groups and `/app/me`.
+- **Not part of the Sandbox.** The endpoint takes no API key at all - sign-in, the OAuth2
+  flow, the health checks, the partner-company routes. A Sandbox key plays no part in it,
+  and its behavior here is not part of the Sandbox contract.
+
+Both groups are documented in the Sandbox reference because the Sandbox runs the same
+build as Production. Use them in Production.
+
 ## Rate limits
 
 Sandbox credentials allow up to **10 requests per minute** and **300 requests per day**. When the API returns `429 Too Many Requests`, wait for the period indicated by `Retry-After` before retrying. See [Rate limits](/guides/rate-limits) for retry guidance.
