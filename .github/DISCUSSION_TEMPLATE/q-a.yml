@@ -1,4 +1,3 @@
-title: "[Q&A] "
 body:
   - type: markdown
     attributes:
@@ -7,16 +6,23 @@ body:
 
         **Do not paste API keys, tokens, uid, or org_id values.** Replace them with placeholders such as `<API_KEY>` or `<UID>`.
 
-        - Found a bug? Open an [issue](../../issues/new) instead.
-        - Requesting production access? Use the form on the [Support page](../../blob/main/support.mdx).
+        - Found a bug? Open an [issue](https://github.com/soxaidev/web-api-docs/issues/new) instead.
+        - Requesting production access? Use the form on the [Support page](https://github.com/soxaidev/web-api-docs/blob/main/support.mdx).
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: What you want to know or do.
+    validations:
+      required: true
   - type: input
     id: endpoint
     attributes:
       label: Endpoint
-      description: Method and path of the operation you are calling.
+      description: If your question is about a specific operation, its method and path.
       placeholder: GET /api/v2/data/daily
     validations:
-      required: true
+      required: false
   - type: dropdown
     id: environment
     attributes:
@@ -25,7 +31,7 @@ body:
         - Production
         - Sandbox
     validations:
-      required: true
+      required: false
   - type: textarea
     id: request
     attributes:
@@ -40,14 +46,14 @@ body:
       label: Expected result
       description: What you expected the API to return.
     validations:
-      required: true
+      required: false
   - type: textarea
     id: actual
     attributes:
       label: Actual result
       description: What the API actually returned, including the HTTP status code and response body.
     validations:
-      required: true
+      required: false
   - type: checkboxes
     id: no-secrets
     attributes:
