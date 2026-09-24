@@ -1,0 +1,57 @@
+title: "[Q&A] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ask how to use the SOXAI Web API here. Answered questions stay public and searchable, so others can find them later.
+
+        **Do not paste API keys, tokens, uid, or org_id values.** Replace them with placeholders such as `<API_KEY>` or `<UID>`.
+
+        - Found a bug? Open an [issue](../../issues/new) instead.
+        - Requesting production access? Use the form on the [Support page](../../blob/main/support.mdx).
+  - type: input
+    id: endpoint
+    attributes:
+      label: Endpoint
+      description: Method and path of the operation you are calling.
+      placeholder: GET /api/v2/data/daily
+    validations:
+      required: true
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options:
+        - Production
+        - Sandbox
+    validations:
+      required: true
+  - type: textarea
+    id: request
+    attributes:
+      label: Request
+      description: The request you sent, with credentials and identifiers replaced by placeholders.
+      render: shell
+    validations:
+      required: false
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+      description: What you expected the API to return.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+      description: What the API actually returned, including the HTTP status code and response body.
+    validations:
+      required: true
+  - type: checkboxes
+    id: no-secrets
+    attributes:
+      label: Before posting
+      options:
+        - label: I removed API keys, tokens, uid, and org_id values from this post.
+          required: true
