@@ -26043,13 +26043,1493 @@
         ]
       }
     },
+    "/api/groups/{group_id}/reactions": {
+      "get": {
+        "tags": [
+          "Family Groups"
+        ],
+        "summary": "Get every member's reactions in a group",
+        "description": "The reactions currently held on each member of the group (SOX-116).\n\nGroupView already carries the same summaries on its cards, so this endpoint is for\nrefreshing them on their own — it reads Firestore only and skips the InfluxDB\nfan-out a full GroupView call pays for.\n\nReactions are **cumulative**: once a member sends one it stays\nuntil they take it back, and nothing resets at midnight. `count` is therefore\n\"how many members currently hold this reaction on this person\", not a per-day tally.\n\nReactions are **not health data** and are **not masked**. A member who has hidden\ntheir metrics (`masterHidden`) shows an empty `data` card and still sends and\nreceives reactions — the same line `joinedAt` sits on: sharing settings govern\nhealth values, while who is in a group and what they send each other is already\nvisible to everyone in it. Nothing here is written to the group's audit log,\nbecause nothing here reads a health value.\n\n`uids` lists the members currently holding that reaction. Every one of them is a\nmember of this group, whose roster the caller can already read in full, so this\ndiscloses nothing new — it is what lets a client draw \"Dad and Mom cheered you\"\nwithout a second call. Actors who have since left the group are filtered out, so\na count never includes somebody who is no longer here.\n\nThe list is ordered by the **catalog**, not by count: ordering by count makes the\nrow of icons jump under the user's finger at the moment they tap one. An emoji\nnobody holds is omitted, and a member with no reactions at all gets `[]`.\n\n**Parameters**\n\n- `group_id` (path, required) - the group whose reactions are returned.\n\n**Response**\n\n- `200` returns `members`, a map of member uid to that member's reaction list.\n  Members holding no reactions are omitted from the map.\n\n**Errors**\n\n- None beyond the common ones. A group that does not exist is not a `404` here: the\n  answer is built from the caller's own membership record, which is absent either way,\n  so both cases are the `403` named under Authorization.\n\n**Authorization**\n\n- Scheme: `Authorization: Bearer <idToken>` or `soxai-api-key: <api key>`.\n- Authority inside a group comes from the caller's own membership record, never from a SOXAI\n  role: an `Admin`, `PartnerAdmin` or `OrgAdmin` claim grants nothing here.\n- Required: an active member of the group. A caller who is not one receives\n  `403 not a member of this group`, whether or not the group exists.",
+        "operationId": "get_group_reactions",
+        "parameters": [
+          {
+            "description": "The group whose reactions are returned.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Group Id",
+              "description": "The group whose reactions are returned.",
+              "examples": [
+                "b7d1f0c9a2e4d6f8b0c1"
+              ]
+            },
+            "name": "group_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A map of member uid to that member's reactions. Members with none are omitted.",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "members": {
+                    "user456": [
+                      {
+                        "id": "muscle",
+                        "emoji": "💪",
+                        "count": 2,
+                        "mine": true,
+                        "uids": [
+                          "user123",
+                          "user789"
+                        ]
+                      },
+                      {
+                        "id": "party",
+                        "emoji": "🎉",
+                        "count": 1,
+                        "mine": false,
+                        "uids": [
+                          "user789"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - the credentials are missing, expired or invalid",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "http-error",
+                  "error_msg": "Invalid authentication credentials. <reason>"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Not enough permission",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "forbidden",
+                  "error_msg": "Not enough permission"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error - Failed to fetch data",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "internal-server-error",
+                  "error_msg": "Failed to fetch data: <error_message>"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests - the rate limit was exceeded",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "Retry-After": {
+                "description": "Whole seconds to wait until both applicable buckets can accept one request. Returned only with a 429 response.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 1.0
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "rate-limited",
+                  "error_msg": "Rate limit exceeded. Retry after <n> seconds."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity - a request field does not meet the endpoint's validation rules",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "unprocessable-entity",
+                  "error_msg": "body.<field>: <validation message>"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "SoxaiApiKey": []
+          }
+        ]
+      }
+    },
+    "/api/groups/{group_id}/reactions/{target_uid}/{emoji_id}": {
+      "put": {
+        "tags": [
+          "Family Groups"
+        ],
+        "summary": "Send a reaction to a member",
+        "description": "Send one reaction to one member of the group (SOX-116).\n\n**Idempotent, and deliberately not a toggle.** Sending the same reaction twice\nleaves exactly one; use `DELETE` to take it back. A toggle would not survive a\nretry — a resend on a flaky connection would undo the reaction the user had just\nsent, and a tap on a family screen is exactly the kind of call that gets retried.\n\nReactions are **cumulative**: once a member sends one it stays\nuntil they take it back, and nothing resets at midnight. `count` is therefore\n\"how many members currently hold this reaction on this person\", not a per-day tally.\n\nReactions are **not health data** and are **not masked**. A member who has hidden\ntheir metrics (`masterHidden`) shows an empty `data` card and still sends and\nreceives reactions — the same line `joinedAt` sits on: sharing settings govern\nhealth values, while who is in a group and what they send each other is already\nvisible to everyone in it. Nothing here is written to the group's audit log,\nbecause nothing here reads a health value.\n\n`uids` lists the members currently holding that reaction. Every one of them is a\nmember of this group, whose roster the caller can already read in full, so this\ndiscloses nothing new — it is what lets a client draw \"Dad and Mom cheered you\"\nwithout a second call. Actors who have since left the group are filtered out, so\na count never includes somebody who is no longer here.\n\nThe list is ordered by the **catalog**, not by count: ordering by count makes the\nrow of icons jump under the user's finger at the moment they tap one. An emoji\nnobody holds is omitted, and a member with no reactions at all gets `[]`.\n\n**Parameters**\n\n- `group_id` (path, required) - the group both members belong to.\n- `target_uid` (path, required) - the member receiving the reaction. Sending one to\n  yourself is allowed.\n- `emoji_id` (path, required) - a reaction id from the catalog (`eyes`, `muscle`,\n  `smile`, `surprise`, `party`, `heart`), **not** the emoji character itself. The\n  response carries a reference character; each app renders its own artwork for an id.\n\n**Response**\n\n- `200` returns the member's full reaction list as it now stands — the same shape\n  `DELETE` returns, so one parser serves both.\n\n**Errors**\n\n| Status | Condition |\n| --- | --- |\n| 400 | `emoji_id` is not in the catalog |\n| 404 | `target_uid` is not on this group's roster |\n| 409 | The caller already holds the maximum number of reactions on this member |\n\n**Authorization**\n\n- Scheme: `Authorization: Bearer <idToken>` or `soxai-api-key: <api key>`.\n- Authority inside a group comes from the caller's own membership record, never from a SOXAI\n  role: an `Admin`, `PartnerAdmin` or `OrgAdmin` claim grants nothing here.\n- Required: an active member of the group. A caller who is not one receives\n  `403 not a member of this group`, whether or not the group exists.",
+        "operationId": "add_group_reaction",
+        "parameters": [
+          {
+            "description": "The group both members belong to.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Group Id",
+              "description": "The group both members belong to.",
+              "examples": [
+                "b7d1f0c9a2e4d6f8b0c1"
+              ]
+            },
+            "name": "group_id",
+            "in": "path"
+          },
+          {
+            "description": "The member receiving the reaction.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Target Uid",
+              "description": "The member receiving the reaction.",
+              "examples": [
+                "user456"
+              ]
+            },
+            "name": "target_uid",
+            "in": "path"
+          },
+          {
+            "description": "Reaction id from the catalog, e.g. 'muscle'.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Emoji Id",
+              "description": "Reaction id from the catalog, e.g. 'muscle'.",
+              "examples": [
+                "muscle"
+              ]
+            },
+            "name": "emoji_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The member's reactions as they now stand. Same shape DELETE returns.",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "targetUid": "user456",
+                  "reactions": [
+                    {
+                      "id": "muscle",
+                      "emoji": "💪",
+                      "count": 2,
+                      "mine": true,
+                      "uids": [
+                        "user123",
+                        "user789"
+                      ]
+                    },
+                    {
+                      "id": "party",
+                      "emoji": "🎉",
+                      "count": 1,
+                      "mine": false,
+                      "uids": [
+                        "user789"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - emoji_id is not a known reaction",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "bad-request",
+                  "error_msg": "unknown reaction: fire"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - the credentials are missing, expired or invalid",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "http-error",
+                  "error_msg": "Invalid authentication credentials. <reason>"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Not enough permission",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "forbidden",
+                  "error_msg": "Not enough permission"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - target_uid is not on this group's roster",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "not-found",
+                  "error_msg": "member not found"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict - the caller already holds the maximum number of reactions on this member",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "conflict",
+                  "error_msg": "at most 3 reactions per member; remove one first"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error - Failed to fetch data",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "internal-server-error",
+                  "error_msg": "Failed to fetch data: <error_message>"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests - the rate limit was exceeded",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "Retry-After": {
+                "description": "Whole seconds to wait until both applicable buckets can accept one request. Returned only with a 429 response.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 1.0
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "rate-limited",
+                  "error_msg": "Rate limit exceeded. Retry after <n> seconds."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity - a request field does not meet the endpoint's validation rules",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "unprocessable-entity",
+                  "error_msg": "body.<field>: <validation message>"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "SoxaiApiKey": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Family Groups"
+        ],
+        "summary": "Take back a reaction",
+        "description": "Take back one reaction the caller sent to one member (SOX-116).\n\n**Idempotent**: removing a reaction the caller does not hold is a success, not a\n`404`. Only the caller's own reaction is removed — there is no way to clear\nsomebody else's.\n\nReactions are **cumulative**: once a member sends one it stays\nuntil they take it back, and nothing resets at midnight. `count` is therefore\n\"how many members currently hold this reaction on this person\", not a per-day tally.\n\nReactions are **not health data** and are **not masked**. A member who has hidden\ntheir metrics (`masterHidden`) shows an empty `data` card and still sends and\nreceives reactions — the same line `joinedAt` sits on: sharing settings govern\nhealth values, while who is in a group and what they send each other is already\nvisible to everyone in it. Nothing here is written to the group's audit log,\nbecause nothing here reads a health value.\n\n`uids` lists the members currently holding that reaction. Every one of them is a\nmember of this group, whose roster the caller can already read in full, so this\ndiscloses nothing new — it is what lets a client draw \"Dad and Mom cheered you\"\nwithout a second call. Actors who have since left the group are filtered out, so\na count never includes somebody who is no longer here.\n\nThe list is ordered by the **catalog**, not by count: ordering by count makes the\nrow of icons jump under the user's finger at the moment they tap one. An emoji\nnobody holds is omitted, and a member with no reactions at all gets `[]`.\n\n**Parameters**\n\n- `group_id` (path, required) - the group both members belong to.\n- `target_uid` (path, required) - the member whose reaction is being taken back.\n- `emoji_id` (path, required) - a reaction id from the catalog, **not** the emoji\n  character itself.\n\n**Response**\n\n- `200` returns the member's full reaction list as it now stands — the same shape\n  `PUT` returns.\n\n**Errors**\n\n| Status | Condition |\n| --- | --- |\n| 400 | `emoji_id` is not in the catalog |\n| 404 | `target_uid` is not on this group's roster |\n\n**Authorization**\n\n- Scheme: `Authorization: Bearer <idToken>` or `soxai-api-key: <api key>`.\n- Authority inside a group comes from the caller's own membership record, never from a SOXAI\n  role: an `Admin`, `PartnerAdmin` or `OrgAdmin` claim grants nothing here.\n- Required: an active member of the group. A caller who is not one receives\n  `403 not a member of this group`, whether or not the group exists.",
+        "operationId": "remove_group_reaction",
+        "parameters": [
+          {
+            "description": "The group both members belong to.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Group Id",
+              "description": "The group both members belong to.",
+              "examples": [
+                "b7d1f0c9a2e4d6f8b0c1"
+              ]
+            },
+            "name": "group_id",
+            "in": "path"
+          },
+          {
+            "description": "The member whose reaction is taken back.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Target Uid",
+              "description": "The member whose reaction is taken back.",
+              "examples": [
+                "user456"
+              ]
+            },
+            "name": "target_uid",
+            "in": "path"
+          },
+          {
+            "description": "Reaction id from the catalog, e.g. 'muscle'.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Emoji Id",
+              "description": "Reaction id from the catalog, e.g. 'muscle'.",
+              "examples": [
+                "muscle"
+              ]
+            },
+            "name": "emoji_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The member's reactions as they now stand. Same shape PUT returns.",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "targetUid": "user456",
+                  "reactions": [
+                    {
+                      "id": "muscle",
+                      "emoji": "💪",
+                      "count": 2,
+                      "mine": true,
+                      "uids": [
+                        "user123",
+                        "user789"
+                      ]
+                    },
+                    {
+                      "id": "party",
+                      "emoji": "🎉",
+                      "count": 1,
+                      "mine": false,
+                      "uids": [
+                        "user789"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - emoji_id is not a known reaction",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "bad-request",
+                  "error_msg": "unknown reaction: fire"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - the credentials are missing, expired or invalid",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "http-error",
+                  "error_msg": "Invalid authentication credentials. <reason>"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Not enough permission",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "forbidden",
+                  "error_msg": "Not enough permission"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - target_uid is not on this group's roster",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "not-found",
+                  "error_msg": "member not found"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error - Failed to fetch data",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "internal-server-error",
+                  "error_msg": "Failed to fetch data: <error_message>"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests - the rate limit was exceeded",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "Retry-After": {
+                "description": "Whole seconds to wait until both applicable buckets can accept one request. Returned only with a 429 response.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 1.0
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "rate-limited",
+                  "error_msg": "Rate limit exceeded. Retry after <n> seconds."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity - a request field does not meet the endpoint's validation rules",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "unprocessable-entity",
+                  "error_msg": "body.<field>: <validation message>"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          },
+          {
+            "SoxaiApiKey": []
+          }
+        ]
+      }
+    },
     "/api/v2/GroupView/{group_id}": {
       "get": {
         "tags": [
           "Family Groups"
         ],
         "summary": "Get a family group's shared health data",
-        "description": "The single data-view endpoint for family groups (spec §3.5).\nAll masking goes through resolve_field_mask — no endpoint-local mask logic.\n\nEvery card is scoped to the days that member has been in the group (SOX-91):\nnothing from before their `joinedAt` day is shared, whatever the requested\nrange says, and leaving and rejoining moves the floor to the rejoin day\n(leaving deletes the membership, so a rejoin gets a fresh `joinedAt`). So a\nlong `start_day` does not reach further back than the join for a recent\nmember — their `history` simply begins on their join day — and a member who\njoined today shows only today. Days are the owner's local days, and each card\nreports its own floor as `sharedFrom` so a short `history` reads as a recent\njoin rather than as missing data.\n\n`data` holds the latest visible value per catalog metric; `last_sync_time`\n(UTC ISO 8601) is a profile snapshot, so it appears there only and never in\nthe per-day `history`.\n\nSleep duration (睡眠時間) is `sleep_total_time_exclude_awake`: minutes of true\nsleep (純睡眠時間), that is sleep with mid-sleep waking (中途覚醒) excluded - the\nsame number the owner's own sleep screen shows (SOX-95). It used to be\n`sleep_total_time` (total sleep time, 総睡眠時間), which reads longer by\nexactly the night's awake time, so one label answered two different values\ndepending on the screen. BREAKING for clients on the old key — both the\nresponse key and the `sharedFields` opt-in key are renamed, because a\nGroupView catalog key is always the stored InfluxDB `_field` name. DailyInfo\nv2 serves this same field to the personal screen as `sleep_total_sleep_time`.\nA night with no true sleep time (純睡眠時間) recorded omits the field rather\nthan reporting 0 — the same \"--\" the owner sees for that night, since there is\nno total to fall back to that would still agree with their own screen.\n\nBeside `displayName` and `role`, each card carries `joinedAt` (SOX-92) — when\nthat person's membership started, as offset-carrying ISO 8601 like the group's\nown `createdAt`. It sits outside `data` and outside `visibleFields` because it\nis membership metadata rather than a health value: sharing settings do not hide\nwho is in the group. Same key, same value as the `members` rows of\n`GET /api/groups`.\n\n`joinedAt` and `sharedFrom` are not duplicates: the first is the exact instant\nthe membership began, the second the owner's LOCAL day that instant falls in.\nThey disagree whenever the two calendars do — a JST member who joined at\n02:00 local has `joinedAt` on the previous UTC day. Read `joinedAt` for the join\ndate (参加日) and ordering, `sharedFrom` for where that member's data starts.\n\n`heat_stroke_severity` is the stored severity integer, passed through\nunchanged (SOX-83): 0=NORMAL, 1=Low, 2=Medium, 3=High, 4=Critical — the same\nscale the apps already render on their own heat-stroke screens. Per day it is\nthe HIGHEST severity that day reached, not the most recent one. It comes with\n`heat_stroke_alert_time`, the last moment that peak was reached, as ISO 8601\nin the OWNER's UTC offset (`2026-08-28T15:00:00+09:00`) so the wall clock\nreads the same for a viewer in another timezone. A severity-0 day carries no\nalert time: NORMAL is not an alert (警戒).\n\nThe pair is omitted entirely when there is no alert record in the window,\nwhich is NOT the same statement as 0/NORMAL: soxai-app only writes a record\nwhen it raises an alert, so an absent field means \"no alert, or no ring, or\nno sync\". Pair it with `last_sync_time` to tell those apart. Its `history`\ndays are the OWNER's local days, since the underlying alerts are timestamped\ninstants rather than the day labels the daily metrics use.\n\n`visibleFields` is the viewer's mask. Since SOX-83 that INCLUDES the caller's\nown card: your own card shows exactly what the rest of the group sees of you,\nso the family screen doubles as a preview of your sharing settings. An owner\nwith `masterHidden` therefore sees their own card empty too. The self card\nalso carries `sharedFields` / `masterHidden` / `sharedFieldNames` — the raw\ntoggles the edit screen needs (SOX-67);\n`GET /api/groups/{group_id}/members/me` returns the same.\n\n**Parameters**\n\n- `group_id` (path, required) - the group whose members' cards are returned.\n- `start_day` / `end_day` (query, optional) - `YYYY-MM-DD`, both inclusive. Give\n  either one and every card also carries a per-day `history`; omit both for latest\n  values only.\n\n**Response**\n\n- `200` returns one card per active member, each holding `data` - the latest visible\n  value per catalog metric - and `visibleFields`, what that member shares with the\n  caller. A member sharing nothing still appears, with an empty `data`.\n- The caller's own card carries the whole catalog regardless of what they share.\n\n**Errors**\n\n| Status | Condition |\n| --- | --- |\n| 400 | `start_day` or `end_day` is not `YYYY-MM-DD`, `start_day` is after `end_day`, or the range exceeds 366 days |\n| 404 | The group does not exist |\n\n**Authorization**\n\n- Scheme: `Authorization: Bearer <idToken>` or `soxai-api-key: <api key>`.\n- Authority inside a group comes from the caller's own membership record, never from a SOXAI\n  role: an `Admin`, `PartnerAdmin` or `OrgAdmin` claim grants nothing here.\n- Required: an active member of the group. A caller who is not one receives\n  `403 not a member of this group`, whether or not the group exists.\n\n**Response fields**\n\n**GroupView**\n\n| Field | Unit | Description |\n| --- | --- | --- |\n| `sleep_score` | pt | Sleep Score: Overall index of sleep quality |\n| `health_score` | pt | Health Score: Overall index of physical health, ranging from 0 to 100 |\n| `activity_score` | pt | Activity Score: Index of physical activity |\n| `sleep_total_time_exclude_awake` | mins | Sleep - Sleep Time Excluding Awake Time: Sleep duration excluding time spent awake |\n| `activity_steps` | step | Activity - Steps: Number of steps in a day |\n| `heat_stroke_severity` | code | Heat Stroke Alert - Severity: Integer from 0 to 4, passed through from SX_HeatStroke_Alert. Absent when no alert record exists for the day, which covers no alert, no ring and no sync alike |\n| `heat_stroke_alert_time` | datetime | Heat Stroke Alert - Alert Time: ISO 8601 instant the alert fired, carrying the local UTC offset of the owner. Shares the heat_stroke_severity sharing setting |\n| `last_sync_time` | datetime | Last Sync Time: UTC ISO 8601 timestamp of the last recorded ring sync, to second precision. Read from the Firestore user profile rather than a time series, and absent when the user has never synced |",
+        "description": "The single data-view endpoint for family groups (spec §3.5).\nAll masking goes through resolve_field_mask — no endpoint-local mask logic.\n\nEvery card is scoped to the days that member has been in the group (SOX-91):\nnothing from before their `joinedAt` day is shared, whatever the requested\nrange says, and leaving and rejoining moves the floor to the rejoin day\n(leaving deletes the membership, so a rejoin gets a fresh `joinedAt`). So a\nlong `start_day` does not reach further back than the join for a recent\nmember — their `history` simply begins on their join day — and a member who\njoined today shows only today. Days are the owner's local days, and each card\nreports its own floor as `sharedFrom` so a short `history` reads as a recent\njoin rather than as missing data.\n\n`data` holds the latest visible value per catalog metric; `last_sync_time`\n(UTC ISO 8601) is a profile snapshot, so it appears there only and never in\nthe per-day `history`.\n\nSleep duration (睡眠時間) is `sleep_total_time_exclude_awake`: minutes of true\nsleep (純睡眠時間), that is sleep with mid-sleep waking (中途覚醒) excluded - the\nsame number the owner's own sleep screen shows (SOX-95). It used to be\n`sleep_total_time` (total sleep time, 総睡眠時間), which reads longer by\nexactly the night's awake time, so one label answered two different values\ndepending on the screen. BREAKING for clients on the old key — both the\nresponse key and the `sharedFields` opt-in key are renamed, because a\nGroupView catalog key is always the stored InfluxDB `_field` name. DailyInfo\nv2 serves this same field to the personal screen as `sleep_total_sleep_time`.\nA night with no true sleep time (純睡眠時間) recorded omits the field rather\nthan reporting 0 — the same \"--\" the owner sees for that night, since there is\nno total to fall back to that would still agree with their own screen.\n\nBeside `displayName` and `role`, each card carries `joinedAt` (SOX-92) — when\nthat person's membership started, as offset-carrying ISO 8601 like the group's\nown `createdAt`. It sits outside `data` and outside `visibleFields` because it\nis membership metadata rather than a health value: sharing settings do not hide\nwho is in the group. Same key, same value as the `members` rows of\n`GET /api/groups`.\n\n`joinedAt` and `sharedFrom` are not duplicates: the first is the exact instant\nthe membership began, the second the owner's LOCAL day that instant falls in.\nThey disagree whenever the two calendars do — a JST member who joined at\n02:00 local has `joinedAt` on the previous UTC day. Read `joinedAt` for the join\ndate (参加日) and ordering, `sharedFrom` for where that member's data starts.\n\n`heat_stroke_severity` is the stored severity integer, passed through\nunchanged (SOX-83): 0=NORMAL, 1=Low, 2=Medium, 3=High, 4=Critical — the same\nscale the apps already render on their own heat-stroke screens. Per day it is\nthe HIGHEST severity that day reached, not the most recent one. It comes with\n`heat_stroke_alert_time`, the last moment that peak was reached, as ISO 8601\nin the OWNER's UTC offset (`2026-08-28T15:00:00+09:00`) so the wall clock\nreads the same for a viewer in another timezone. A severity-0 day carries no\nalert time: NORMAL is not an alert (警戒).\n\nThe pair is omitted entirely when there is no alert record in the window,\nwhich is NOT the same statement as 0/NORMAL: soxai-app only writes a record\nwhen it raises an alert, so an absent field means \"no alert, or no ring, or\nno sync\". Pair it with `last_sync_time` to tell those apart. Its `history`\ndays are the OWNER's local days, since the underlying alerts are timestamped\ninstants rather than the day labels the daily metrics use.\n\nEach card carries `reactions` — the emoji the rest of the group is currently\nholding on that member (SOX-116), with a derived `count` and `mine` for the\ncaller. They are **cumulative**: a reaction stays until its sender takes it\nback, and nothing resets at midnight. They sit outside `data` and outside the\nmask for the same reason `joinedAt` does — a reaction is a message between\nmembers, not a health value — so a `masterHidden` member shows an empty `data`\nand still carries reactions, and reading them writes no audit entry. `[]` when\nnobody has reacted. Send and take back with\n`PUT`/`DELETE /api/groups/{group_id}/reactions/{target_uid}/{emoji_id}`, or read\nthem on their own with `GET /api/groups/{group_id}/reactions` when the full\nInfluxDB fan-out this endpoint pays for is not needed.\n\n`visibleFields` is the viewer's mask. Since SOX-83 that INCLUDES the caller's\nown card: your own card shows exactly what the rest of the group sees of you,\nso the family screen doubles as a preview of your sharing settings. An owner\nwith `masterHidden` therefore sees their own card empty too. The self card\nalso carries `sharedFields` / `masterHidden` / `sharedFieldNames` — the raw\ntoggles the edit screen needs (SOX-67);\n`GET /api/groups/{group_id}/members/me` returns the same.\n\n**Parameters**\n\n- `group_id` (path, required) - the group whose members' cards are returned.\n- `start_day` / `end_day` (query, optional) - `YYYY-MM-DD`, both inclusive. Give\n  either one and every card also carries a per-day `history`; omit both for latest\n  values only.\n\n**Response**\n\n- `200` returns one card per active member, each holding `data` - the latest visible\n  value per catalog metric - and `visibleFields`, what that member shares with the\n  caller. A member sharing nothing still appears, with an empty `data`.\n- The caller's own card carries the whole catalog regardless of what they share.\n\n**Errors**\n\n| Status | Condition |\n| --- | --- |\n| 400 | `start_day` or `end_day` is not `YYYY-MM-DD`, `start_day` is after `end_day`, or the range exceeds 366 days |\n| 404 | The group does not exist |\n\n**Authorization**\n\n- Scheme: `Authorization: Bearer <idToken>` or `soxai-api-key: <api key>`.\n- Authority inside a group comes from the caller's own membership record, never from a SOXAI\n  role: an `Admin`, `PartnerAdmin` or `OrgAdmin` claim grants nothing here.\n- Required: an active member of the group. A caller who is not one receives\n  `403 not a member of this group`, whether or not the group exists.\n\n**Response fields**\n\n**GroupView**\n\n| Field | Unit | Description |\n| --- | --- | --- |\n| `sleep_score` | pt | Sleep Score: Overall index of sleep quality |\n| `health_score` | pt | Health Score: Overall index of physical health, ranging from 0 to 100 |\n| `activity_score` | pt | Activity Score: Index of physical activity |\n| `sleep_total_time_exclude_awake` | mins | Sleep - Sleep Time Excluding Awake Time: Sleep duration excluding time spent awake |\n| `activity_steps` | step | Activity - Steps: Number of steps in a day |\n| `heat_stroke_severity` | code | Heat Stroke Alert - Severity: Integer from 0 to 4, passed through from SX_HeatStroke_Alert. Absent when no alert record exists for the day, which covers no alert, no ring and no sync alike |\n| `heat_stroke_alert_time` | datetime | Heat Stroke Alert - Alert Time: ISO 8601 instant the alert fired, carrying the local UTC offset of the owner. Shares the heat_stroke_severity sharing setting |\n| `last_sync_time` | datetime | Last Sync Time: UTC ISO 8601 timestamp of the last recorded ring sync, to second precision. Read from the Firestore user profile rather than a time series, and absent when the user has never synced |",
         "operationId": "get_group_view",
         "parameters": [
           {
@@ -26173,6 +27653,17 @@
                         "sleep_score"
                       ],
                       "sharedFrom": "2026-08-03",
+                      "reactions": [
+                        {
+                          "id": "muscle",
+                          "emoji": "👍",
+                          "count": 1,
+                          "mine": false,
+                          "uids": [
+                            "user456"
+                          ]
+                        }
+                      ],
                       "sharedFields": {
                         "sleep_score": true,
                         "health_score": true,
@@ -26205,7 +27696,8 @@
                         "heat_stroke_severity",
                         "sleep_score"
                       ],
-                      "sharedFrom": "2026-08-05"
+                      "sharedFrom": "2026-08-05",
+                      "reactions": []
                     }
                   ]
                 }
