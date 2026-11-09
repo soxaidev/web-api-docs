@@ -8151,7 +8151,7 @@
           "Organization Members"
         ],
         "summary": "Accept an organization invitation",
-        "description": "Accept an organization invitation from the link in the invitation\nemail. The invited member's status changes from `Invitation Pending` to `Activated`, which is\nwhat makes their data visible to that organization's admins.\n\n**Parameters**\n\n- `token` (path, required) - the one-time token carried by the invitation link.\n\n**Response**\n\n- `200` `{\"msg\": \"success\"}` once the invitation is accepted. Accepting twice is\n  harmless and answers the same way.\n\n**Errors**\n\n- None. **A token that is invalid, expired or already consumed is also a `200`**,\n  carrying `{\"msg\": \"write failed\"}`. The link is opened by a mail client, so the\n  page must not turn a bad token into an error page; check `msg` rather than the\n  status code.\n\n**Authorization**\n\n- No authentication. The token in the link is the credential, so the invited user does not\n  have to be signed in to accept.",
+        "description": "Accept an organization invitation from the link in the invitation\nemail. The invited member's status changes from `Invitation Pending` to `Activated`, which is\nwhat makes their data visible to that organization's admins.\n\n**Parameters**\n\n- `token` (path, required) - the token carried by the invitation link. It is not consumed\n  by accepting and stays usable until it expires.\n\n**Response**\n\n- `200` `{\"msg\": \"success\"}` once the invitation is accepted. Accepting twice is\n  harmless and answers the same way.\n\n**Errors**\n\n- None. **A token that is invalid, expired or missing a usable member or organization id\n  is also a `200`**, carrying `{\"msg\": \"write failed\"}`, and so is a failure to save the\n  acceptance. The link is opened by a mail client, so the page must not turn a bad token\n  into an error page; check `msg` rather than the status code.\n\n**Authorization**\n\n- No authentication. The token in the link is the credential, so the invited user does not\n  have to be signed in to accept.",
         "operationId": "verify_email",
         "parameters": [
           {
@@ -8170,7 +8170,7 @@
         ],
         "responses": {
           "200": {
-            "description": "The invitation is accepted. A token that is invalid, expired or already consumed is also a 200, carrying msg write failed, because the link is opened by a mail client and must not become an error page.",
+            "description": "The invitation is accepted. A token that is invalid, expired or missing a usable member or organization id, and a failure to save the acceptance, are also a 200, carrying msg write failed, because the link is opened by a mail client and must not become an error page.",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
