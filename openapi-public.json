@@ -14929,7 +14929,7 @@
           "OAuth2"
         ],
         "summary": "Show the OAuth2 login page",
-        "description": "Render the SOXAI login page that starts the OAuth2 authorization code\nflow. A third-party client sends the user's browser here.\n\nThe request is validated against the client registration before the page is shown: an unknown\n`client_id`, a `redirect_uri` that is not the registered one, or a `scope` wider than the\nclient was granted are all refused rather than rendered.\n\n**Parameters**\n\n- `client_id` (query, required) - the registered OAuth2 client.\n- `redirect_uri` (query, required) - must equal the URI registered for that client.\n- `scope` (query, required) - must be a subset of the scope registered for that client.\n- `state` / `nonce` (query, optional) - passed through to the redirect.\n\n**Response**\n\n- `200` returns the login page as HTML. After successful sign-in, the browser continues\n  through the authorization flow.\n\n**Errors**\n\n| Status | Condition |\n| --- | --- |\n| 400 | `redirect_uri` does not match the registration, or `scope` exceeds what the client may request |\n| 404 | `client_id` is not registered |\n\n**Authorization**\n\n- No authentication. This is part of the OAuth2 authorization flow, which runs before the\n  caller has a SOXAI token.",
+        "description": "Render the SOXAI login page that starts the OAuth2 authorization code\nflow. A third-party client sends the user's browser here.\n\nThe request is validated against the client registration before the page is shown: an unknown\n`client_id`, a `redirect_uri` that is not the registered one, or a `scope` wider than the\nclient was granted are all refused rather than rendered.\n\n**Parameters**\n\n- `client_id` (query, required) - the registered OAuth2 client.\n- `redirect_uri` (query, required) - must equal the URI registered for that client.\n- `scope` (query, required) - must be a subset of the scope registered for that client.\n- `state` / `nonce` (query, optional) - passed through to the redirect.\n\n**Redirect URIs and testing**\n\n- Production clients are registered with an `https` redirect URI only. A loopback URI such\n  as `http://localhost:8000/callback` is not accepted in Production.\n- To test the flow from a local machine, use the test client and the test environment that\n  SOXAI provides. Loopback redirect URIs are accepted only there.\n\n**Response**\n\n- `200` returns the login page as HTML. After successful sign-in, the browser continues\n  through the authorization flow.\n\n**Errors**\n\n| Status | Condition |\n| --- | --- |\n| 400 | `redirect_uri` does not match the registration, or `scope` exceeds what the client may request |\n| 404 | `client_id` is not registered |\n\n**Authorization**\n\n- No authentication. This is part of the OAuth2 authorization flow, which runs before the\n  caller has a SOXAI token.",
         "operationId": "oauth2_login",
         "parameters": [
           {
@@ -15747,7 +15747,7 @@
           "OAuth2"
         ],
         "summary": "Exchange an authorization code for tokens",
-        "description": "Exchange the authorization `code` from the consent redirect for the end\nuser's tokens. This is the OAuth2 token endpoint, called by the client's backend rather than\nby a browser.\n\n**Parameters**\n\n- Form fields: `grant_type` (must be `authorization_code`), `code`, `client_id` and\n  `client_secret` are required. `nonce` is required when the authorization request carried\n  one, and must be the same value.\n\n**Response**\n\n- `200` returns `id_token` and `refresh_token`. Send `id_token` as\n  `Authorization: Bearer <idToken>`; it expires in about an hour and `refresh_token` renews\n  it at `POST /api/refreshToken`. The authorization `code` is consumed and cannot be\n  exchanged again.\n\n**Errors**\n\n| Status | Condition |\n| --- | --- |\n| 400 | `grant_type` is not `authorization_code`, or `nonce` does not match the one issued with the code |\n| 403 | `client_id` and `client_secret` do not identify a registered client |\n| 404 | The authorization code is unknown or has already been consumed |\n| 408 | The authorization code is older than five minutes. Start the flow again |\n\n**Authorization**\n\n- No SOXAI user token. The client authenticates with its own `client_id` and `client_secret`.",
+        "description": "Exchange the authorization `code` from the consent redirect for the end\nuser's tokens. This is the OAuth2 token endpoint, called by the client's backend rather than\nby a browser.\n\n**Parameters**\n\n- Form fields: `grant_type` (must be `authorization_code`), `code`, `client_id` and\n  `client_secret` are required. `nonce` is required when the authorization request carried\n  one, and must be the same value.\n\n**Response**\n\n- `200` returns `id_token` and `refresh_token`. Send `id_token` as\n  `Authorization: Bearer <idToken>`; it expires in about an hour and `refresh_token` renews\n  it at `POST /api/refreshToken`. The authorization `code` is consumed and cannot be\n  exchanged again. Codes can only be exchanged by the client they were issued to,\n  and the client's registered redirect URI must still match the issuance record.\n\n**Errors**\n\n| Status | Condition |\n| --- | --- |\n| 400 | `grant_type` is not `authorization_code`, or `nonce` does not match the one issued with the code |\n| 403 | `client_id` and `client_secret` do not identify a registered client |\n| 404 | The authorization code is unknown or has already been consumed |\n| 408 | The authorization code is older than five minutes. Start the flow again |\n| 503 | The identity provider could not issue the tokens. Retry later |\n\n**Authorization**\n\n- No SOXAI user token. The client authenticates with its own `client_id` and `client_secret`.",
         "operationId": "access_login",
         "requestBody": {
           "content": {
@@ -16118,6 +16118,66 @@
               }
             }
           },
+          "503": {
+            "description": "Service Unavailable - the identity provider could not issue the tokens. Retry later",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "service-unavailable",
+                  "error_msg": "Service unavailable."
+                }
+              }
+            }
+          },
           "429": {
             "description": "Too Many Requests - the rate limit was exceeded",
             "headers": {
@@ -16416,7 +16476,7 @@
           "OAuth2"
         ],
         "summary": "Require or release two-factor for a list of users",
-        "description": "[Admin / PartnerAdmin / OrgAdmin] Bulk enable or disable 2FA requirement for a list of users.\n\nWhen required=True:\n  Sets required=True on {uid}/totp_info (creates the document if absent).\n  If the user has never enrolled TOTP, they will be forced to set it up on next login.\n  If the user already has a confirmed TOTP setup, they will continue to use it.\n\nWhen required=False:\n  Sets required=False and confirmed=False on {uid}/totp_info.\n  Both fields must be cleared because the login flow checks confirmed first;\n  leaving confirmed=True would still present the TOTP screen even if required=False.\n  The stored secret (if any) is preserved so it can be reused if 2FA is re-enabled.\n\nA uid that belongs to no Firebase Auth user is reported in failed_uids with\nerror USER_NOT_FOUND and is never written.\n\nReturns success_uids and failed_uids with per-uid error details.\n\n**Parameters**\n\n- Body (`TotpSetRequiredRequest`): `uid_list` (at most 200) and `required`.\n\n**Response**\n\n- `200` `{\"success_uids\", \"failed_uids\"}`. A uid that was refused by scope or that\n  belongs to no account is in `failed_uids` with its reason; the rest are applied.\n\n**Errors**\n\n| Status | Condition |\n| --- | --- |\n| 400 | `uid_list` holds more than 200 entries |\n| 403 | The caller holds none of the three roles below |\n| 404 | The caller is an `OrgAdmin` whose own organization no longer exists. No uid is written |\n\n**Authorization**\n\n- Scheme: `Authorization: Bearer <idToken>` or `soxai-api-key: <api key>`.\n- `Admin`, `PartnerAdmin` or `OrgAdmin`.\n- The caller's scope **partitions** `uid_list` rather than admitting or refusing the whole\n  request: uids the caller cannot reach are reported in `failed_uids` and left unwritten,\n  while the rest are applied. A request naming only unreachable uids is therefore still a\n  `200`.\n- `Admin` reaches every uid, `PartnerAdmin` the users registered under its own company,\n  `OrgAdmin` the members of its own organization, and a caller holding both scoped roles\n  the intersection.",
+        "description": "[Admin / PartnerAdmin / OrgAdmin] Bulk enable or disable 2FA requirement for a list of users.\n\nWhen required=True:\n  Sets required=True on {uid}/totp_info (creates the document if absent).\n  If the user has never enrolled TOTP, they will be forced to set it up on next login.\n  If the user already has a confirmed TOTP setup, they will continue to use it.\n\nWhen required=False:\n  Sets required=False and confirmed=False on {uid}/totp_info.\n  Both fields must be cleared because the login flow checks confirmed first;\n  leaving confirmed=True would still present the TOTP screen even if required=False.\n  The stored secret is left in place but never reused: the next setup screen\n  rotates it before displaying a QR code.\n\nA uid that belongs to no Firebase Auth user is reported in failed_uids with\nerror USER_NOT_FOUND and is never written.\n\nReturns success_uids and failed_uids with per-uid error details.\n\n**Parameters**\n\n- Body (`TotpSetRequiredRequest`): `uid_list` (at most 200) and `required`.\n\n**Response**\n\n- `200` `{\"success_uids\", \"failed_uids\"}`. A uid that was refused by scope or that\n  belongs to no account is in `failed_uids` with its reason; the rest are applied.\n\n**Errors**\n\n| Status | Condition |\n| --- | --- |\n| 400 | `uid_list` holds more than 200 entries |\n| 403 | The caller holds none of the three roles below |\n| 404 | The caller is an `OrgAdmin` whose own organization no longer exists. No uid is written |\n\n**Authorization**\n\n- Scheme: `Authorization: Bearer <idToken>` or `soxai-api-key: <api key>`.\n- `Admin`, `PartnerAdmin` or `OrgAdmin`.\n- The caller's scope **partitions** `uid_list` rather than admitting or refusing the whole\n  request: uids the caller cannot reach are reported in `failed_uids` and left unwritten,\n  while the rest are applied. A request naming only unreachable uids is therefore still a\n  `200`.\n- `Admin` reaches every uid, `PartnerAdmin` the users registered under its own company,\n  `OrgAdmin` the members of its own organization, and a caller holding both scoped roles\n  the intersection.",
         "operationId": "admin_set_totp_required",
         "requestBody": {
           "content": {
