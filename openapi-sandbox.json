@@ -8220,8 +8220,8 @@
         "tags": [
           "Organization Members"
         ],
-        "summary": "Accept an organization invitation",
-        "description": "<Badge color=\"red\">Not part of the Sandbox</Badge>\n\nA Sandbox key does not authenticate this endpoint and a Sandbox identity cannot complete it, because it issues or exposes credentials. It is published here because the Sandbox runs the same build. See [Sandbox](/guides/sandbox).\n\nAccept an organization invitation from the link in the invitation\nemail. The invited member's status changes from `Invitation Pending` to `Activated`, which is\nwhat makes their data visible to that organization's admins.\n\n**Parameters**\n\n- `token` (path, required) - the token carried by the invitation link. It is not consumed\n  by accepting and stays usable until it expires.\n\n**Response**\n\n- `200` `{\"msg\": \"success\"}` once the invitation is accepted. Accepting twice is\n  harmless and answers the same way.\n\n**Errors**\n\n- None. **A token that is invalid, expired or missing a usable member or organization id\n  is also a `200`**, carrying `{\"msg\": \"write failed\"}`, and so is a failure to save the\n  acceptance. The link is opened by a mail client, so the page must not turn a bad token\n  into an error page; check `msg` rather than the status code.\n\n**Authorization**\n\n- No authentication. The token in the link is the credential, so the invited user does not\n  have to be signed in to accept.",
+        "summary": "Open an organization invitation",
+        "description": "<Badge color=\"red\">Not part of the Sandbox</Badge>\n\nA Sandbox key does not authenticate this endpoint and a Sandbox identity cannot complete it, because it issues or exposes credentials. It is published here because the Sandbox runs the same build. See [Sandbox](/guides/sandbox).\n\nOpen or accept an organization invitation from the\nlink in the invitation email. Accepting changes the invited member's status from\n`Invitation Pending` to `Activated`, which is what makes their data visible to that\norganization's admins.\n\n`GET` only shows a confirmation page; `POST` accepts. Mail security scanners open links\nin mail on their own, so a `GET` must not give consent on the member's behalf.\n\n**Parameters**\n\n- `token` (path, required) - the token carried by the invitation link. It is not consumed\n  by accepting and stays usable until it expires.\n\n**Response**\n\n- Without `Accept: application/json`: an HTML page for people. `GET` shows the\n  confirmation page; `POST` shows the result.\n- With `Accept: application/json`: `{\"msg\": \"success\" | \"write failed\", \"state\": ...}`.\n  For JSON clients `GET` still accepts, as it always has.\n  - `state` is `activated`, `already_activated`, `closed`, `expired`, `invalid` or `error`.\n  - `msg` is `success` when the member ends up `Activated` (accepting twice is harmless), otherwise `write failed`.\n  - A `Closed` member (data sharing turned off) is not reactivated, and a member removed from the organization is not recreated; both answer `write failed`.\n\n**Errors**\n\n- None. **A token that is invalid, expired or missing a usable member or organization id\n  is also a `200`**, carrying `{\"msg\": \"write failed\"}`, and so is a failure to save the\n  acceptance. The link is opened by a mail client, so the page must not turn a bad token\n  into an error page; check `msg` rather than the status code.\n\n**Authorization**\n\n- No authentication. The token in the link is the credential, so the invited user does not\n  have to be signed in to accept.",
         "operationId": "verify_email",
         "parameters": [
           {
@@ -8240,7 +8240,7 @@
         ],
         "responses": {
           "200": {
-            "description": "The invitation is accepted. A token that is invalid, expired or missing a usable member or organization id, and a failure to save the acceptance, are also a 200, carrying msg write failed, because the link is opened by a mail client and must not become an error page.",
+            "description": "The invitation page, or with Accept application/json the result. A token that is invalid, expired or missing a usable member or organization id, and a failure to save the acceptance, are also a 200, carrying msg write failed, because the link is opened by a mail client and must not become an error page.",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -8291,7 +8291,237 @@
               "application/json": {
                 "schema": {},
                 "example": {
-                  "msg": "success"
+                  "msg": "success",
+                  "state": "activated"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error - Failed to fetch data",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "internal-server-error",
+                  "error_msg": "Failed to fetch data: <error_message>"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests - the rate limit was exceeded",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "Retry-After": {
+                "description": "Whole seconds to wait until both applicable buckets can accept one request. Returned only with a 429 response.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 1.0
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "rate-limited",
+                  "error_msg": "Rate limit exceeded. Retry after <n> seconds."
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity - a request field does not meet the endpoint's validation rules",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "unprocessable-entity",
+                  "error_msg": "body.<field>: <validation message>"
+                }
+              }
+            }
+          }
+        },
+        "x-mint": {
+          "metadata": {
+            "tag": "Not in Sandbox"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Organization Members"
+        ],
+        "summary": "Accept an organization invitation",
+        "description": "<Badge color=\"red\">Not part of the Sandbox</Badge>\n\nA Sandbox key does not authenticate this endpoint and a Sandbox identity cannot complete it, because it issues or exposes credentials. It is published here because the Sandbox runs the same build. See [Sandbox](/guides/sandbox).\n\nOpen or accept an organization invitation from the\nlink in the invitation email. Accepting changes the invited member's status from\n`Invitation Pending` to `Activated`, which is what makes their data visible to that\norganization's admins.\n\n`GET` only shows a confirmation page; `POST` accepts. Mail security scanners open links\nin mail on their own, so a `GET` must not give consent on the member's behalf.\n\n**Parameters**\n\n- `token` (path, required) - the token carried by the invitation link. It is not consumed\n  by accepting and stays usable until it expires.\n\n**Response**\n\n- Without `Accept: application/json`: an HTML page for people. `GET` shows the\n  confirmation page; `POST` shows the result.\n- With `Accept: application/json`: `{\"msg\": \"success\" | \"write failed\", \"state\": ...}`.\n  For JSON clients `GET` still accepts, as it always has.\n  - `state` is `activated`, `already_activated`, `closed`, `expired`, `invalid` or `error`.\n  - `msg` is `success` when the member ends up `Activated` (accepting twice is harmless), otherwise `write failed`.\n  - A `Closed` member (data sharing turned off) is not reactivated, and a member removed from the organization is not recreated; both answer `write failed`.\n\n**Errors**\n\n- None. **A token that is invalid, expired or missing a usable member or organization id\n  is also a `200`**, carrying `{\"msg\": \"write failed\"}`, and so is a failure to save the\n  acceptance. The link is opened by a mail client, so the page must not turn a bad token\n  into an error page; check `msg` rather than the status code.\n\n**Authorization**\n\n- No authentication. The token in the link is the credential, so the invited user does not\n  have to be signed in to accept.",
+        "operationId": "accept_invitation",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Token",
+              "examples": [
+                "<token>"
+              ]
+            },
+            "name": "token",
+            "in": "path",
+            "description": "One-time token from the email or deep link."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The invitation page, or with Accept application/json the result. A token that is invalid, expired or missing a usable member or organization id, and a failure to save the acceptance, are also a 200, carrying msg write failed, because the link is opened by a mail client and must not become an error page.",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {},
+                "example": {
+                  "msg": "success",
+                  "state": "activated"
                 }
               }
             }
