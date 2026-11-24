@@ -153,7 +153,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -207,7 +207,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -438,7 +438,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -492,7 +492,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -723,7 +723,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - SOXAI Authentication could not be reached or answered unexpectedly",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -776,8 +776,8 @@
                   "$ref": "#/components/schemas/ErrorResponse"
                 },
                 "example": {
-                  "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error": "server_error",
+                  "error_msg": "An unexpected error occurred on the server."
                 }
               }
             }
@@ -995,7 +995,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -1061,7 +1061,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -1115,7 +1115,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -1396,7 +1396,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -1522,7 +1522,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -1576,7 +1576,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -1814,7 +1814,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -1940,7 +1940,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -1994,7 +1994,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -2298,7 +2298,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -2484,7 +2484,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -2538,7 +2538,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -2769,7 +2769,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -2895,7 +2895,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -2949,7 +2949,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -3177,7 +3177,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -3243,7 +3243,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -3297,7 +3297,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -3527,7 +3527,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -3653,7 +3653,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -3707,7 +3707,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -4020,7 +4020,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -4206,7 +4206,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - the member could not be created",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -4260,7 +4260,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "An error occurred while creating the org user"
                 }
               }
             }
@@ -4507,7 +4507,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -4693,7 +4693,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -4747,7 +4747,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -5071,7 +5071,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -5197,7 +5197,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -5251,7 +5251,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -5505,7 +5505,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -5631,7 +5631,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -5685,7 +5685,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -6019,7 +6019,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -6199,7 +6199,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Failed to update OrgUser"
                 }
               }
             }
@@ -6443,7 +6443,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -6569,7 +6569,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -6623,7 +6623,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -6871,7 +6871,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -6997,7 +6997,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - the profile could not be read",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -7051,7 +7051,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Failed to get user profile"
                 }
               }
             }
@@ -7368,7 +7368,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -7494,7 +7494,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - the profile could not be updated",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -7548,7 +7548,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Failed to update user profile"
                 }
               }
             }
@@ -7868,7 +7868,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -7994,7 +7994,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - the team name could not be updated",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -8048,7 +8048,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "An error occurred while updating the team name"
                 }
               }
             }
@@ -8228,7 +8228,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -8282,7 +8282,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -8452,7 +8452,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -8506,7 +8506,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -8865,7 +8865,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -8991,7 +8991,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - the data could not be fetched",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -9045,7 +9045,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Failed to fetch data"
                 }
               }
             }
@@ -9412,7 +9412,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -9538,7 +9538,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - the data could not be fetched",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -9592,7 +9592,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Failed to fetch data"
                 }
               }
             }
@@ -9959,7 +9959,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -10085,7 +10085,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - the data could not be fetched",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -10139,7 +10139,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Failed to fetch data"
                 }
               }
             }
@@ -10399,7 +10399,7 @@
             }
           },
           "400": {
-            "description": "Bad Request - start_day / end_day cannot be parsed, the range is inverted, or it is longer than the endpoint allows",
+            "description": "Bad Request - start_day / end_day cannot be parsed, is outside the supported dates (1677-09-22 to 2262-04-10), the range is inverted, or it is longer than the endpoint allows",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -10513,7 +10513,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -10639,7 +10639,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - the data could not be fetched",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -10693,7 +10693,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Failed to fetch data"
                 }
               }
             }
@@ -10949,7 +10949,7 @@
             }
           },
           "400": {
-            "description": "Bad Request - start_day / end_day cannot be parsed, the range is inverted, or it is longer than the endpoint allows",
+            "description": "Bad Request - start_day / end_day cannot be parsed, is outside the supported dates (1677-09-22 to 2262-04-10), the range is inverted, or it is longer than the endpoint allows",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -11063,7 +11063,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -11189,7 +11189,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - the data could not be fetched",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -11243,7 +11243,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Failed to fetch data"
                 }
               }
             }
@@ -11508,7 +11508,7 @@
             }
           },
           "400": {
-            "description": "Bad Request - start_day / end_day cannot be parsed, the range is inverted, or it is longer than the endpoint allows",
+            "description": "Bad Request - start_day / end_day cannot be parsed, is outside the supported dates (1677-09-22 to 2262-04-10), the range is inverted, or it is longer than the endpoint allows",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -11622,7 +11622,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -11748,7 +11748,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - the data could not be fetched",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -11802,7 +11802,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Failed to fetch data"
                 }
               }
             }
@@ -12112,7 +12112,7 @@
             }
           },
           "400": {
-            "description": "Bad Request - start_day / end_day cannot be parsed, the range is inverted, or it is longer than the endpoint allows",
+            "description": "Bad Request - start_day / end_day cannot be parsed, is outside the supported dates (1677-09-22 to 2262-04-10), the range is inverted, or it is longer than the endpoint allows",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -12226,7 +12226,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -12352,7 +12352,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - the data could not be fetched",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -12406,7 +12406,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Failed to fetch data"
                 }
               }
             }
@@ -12712,7 +12712,7 @@
             }
           },
           "400": {
-            "description": "Bad Request - start_day / end_day cannot be parsed, the range is inverted, or it is longer than the endpoint allows",
+            "description": "Bad Request - start_day / end_day cannot be parsed, is outside the supported dates (1677-09-22 to 2262-04-10), the range is inverted, or it is longer than the endpoint allows",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -12826,7 +12826,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -12952,7 +12952,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - the data could not be fetched",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -13006,7 +13006,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Failed to fetch data"
                 }
               }
             }
@@ -13332,7 +13332,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -13458,7 +13458,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -13512,7 +13512,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -13823,7 +13823,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -14003,7 +14003,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch last process log: <error_message>"
+                  "error_msg": "Failed to fetch last process log"
                 }
               }
             }
@@ -14121,7 +14121,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "content": {
               "application/json": {
                 "schema": {
@@ -14129,7 +14129,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -14324,7 +14324,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -14356,7 +14356,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -14534,7 +14534,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -14600,7 +14600,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -14654,7 +14654,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -14931,7 +14931,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -14997,7 +14997,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -15051,7 +15051,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -15405,7 +15405,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -15456,7 +15456,7 @@
               "application/json": {
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               },
               "text/html": {
@@ -15689,7 +15689,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -15815,7 +15815,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -15869,7 +15869,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -16284,7 +16284,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - SOXAI Authentication did not issue the tokens. Other unexpected failures answer error_msg \"Internal server error\"",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -16338,7 +16338,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Failed to refresh ID token."
                 }
               }
             }
@@ -16566,7 +16566,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -16620,7 +16620,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -16895,7 +16895,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -17021,7 +17021,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -17075,7 +17075,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -17335,7 +17335,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -17461,7 +17461,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -17515,7 +17515,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Server error"
                 }
               }
             }
@@ -17750,7 +17750,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - creating the user failed. error_msg is \"Server error\" when an unexpected error occurs in the endpoint itself",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -17804,7 +17804,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Failed to create user"
                 }
               }
             }
@@ -17899,7 +17899,7 @@
           "Partner Companies"
         ],
         "summary": "Change a company user's email with a certificate",
-        "description": "Change the email address of a user the partner company registered.\n\n**Parameters**\n\n- `ex_uid` (form, required) - the company's identifier for the user.\n- `new_email` (form, required) - the new address; it must be well formed.\n- `signed_cer` (form, required) - the signing certificate, described below.\n\n**Response**\n\n- `200` reports the change. The address is updated in SOXAI Authentication as well as\n  in the company's own record, so the user signs in with the new one.\n\n**Errors**\n\n| Status | Condition |\n| --- | --- |\n| 400 | The certificate is invalid, or `new_email` is malformed |\n| 404 | `ex_uid` names no user of this company |\n\n**Authorization**\n\n- No SOXAI user token. The caller authenticates with `signed_cer`, a payload signed with the\n  partner company's private key and verified against the certificate SOXAI issued to that\n  company. The certificate also fixes **which company** the request may act on.\n- A certificate that is unknown, revoked, expired, wrongly signed or issued for a different\n  purpose is refused with `400`.",
+        "description": "Change the email address of a user the partner company registered.\n\n**Parameters**\n\n- `ex_uid` (form, required) - the company's identifier for the user.\n- `new_email` (form, required) - the new address; it must be well formed.\n- `signed_cer` (form, required) - the signing certificate, described below.\n\n**Response**\n\n- `200` reports the change. The address is updated in SOXAI Authentication as well as\n  in the company's own record, so the user signs in with the new one.\n\n**Errors**\n\n| Status | Condition |\n| --- | --- |\n| 400 | The certificate is invalid, `new_email` is malformed (`Invalid email format`), or `new_email` cannot be used (`Unable to change email to the requested address`) |\n| 404 | `ex_uid` names no user of this company |\n\n**Authorization**\n\n- No SOXAI user token. The caller authenticates with `signed_cer`, a payload signed with the\n  partner company's private key and verified against the certificate SOXAI issued to that\n  company. The certificate also fixes **which company** the request may act on.\n- A certificate that is unknown, revoked, expired, wrongly signed or issued for a different\n  purpose is refused with `400`.",
         "operationId": "change_company_user_email_endpoint",
         "requestBody": {
           "content": {
@@ -17971,7 +17971,7 @@
             }
           },
           "400": {
-            "description": "Bad Request - the certificate is invalid, or new_email is malformed",
+            "description": "Bad Request - the certificate is invalid, new_email is malformed (\"Invalid email format\"), or new_email cannot be used (\"Unable to change email to the requested address\")",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -18025,7 +18025,7 @@
                 },
                 "example": {
                   "error": "bad-request",
-                  "error_msg": "Invalid email format"
+                  "error_msg": "Unable to change email to the requested address"
                 }
               }
             }
@@ -18091,7 +18091,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred. error_msg is \"Failed to change user email\" when the change returned no result",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -18145,7 +18145,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Server error"
                 }
               }
             }
@@ -18240,7 +18240,7 @@
           "Partner Companies"
         ],
         "summary": "Sign in a company user with a certificate",
-        "description": "Sign in a user the partner company registered, and return tokens for the SOXAI API.\n\n**Parameters**\n\n- `ex_uid` (form, required) - the company's identifier for the user.\n- `signed_cer` (form, required) - the signing certificate, described below. It must be one\n  issued **for login**.\n\n**Response**\n\n- `200` returns the SOXAI user id, an access token, a refresh token and the expiry.\n\n**Errors**\n\n| Status | Condition |\n| --- | --- |\n| 400 | The certificate is invalid for this purpose |\n| 404 | `ex_uid` names no user of this company |\n\n**Authorization**\n\n- No SOXAI user token. The caller authenticates with `signed_cer`, a payload signed with the\n  partner company's private key and verified against the certificate SOXAI issued to that\n  company. The certificate also fixes **which company** the request may act on.\n- A certificate that is unknown, revoked, expired, wrongly signed or issued for a different\n  purpose is refused with `400`.",
+        "description": "Sign in a user the partner company registered, and return tokens for the SOXAI API.\n\n**Parameters**\n\n- `ex_uid` (form, required) - the company's identifier for the user.\n- `signed_cer` (form, required) - the signing certificate, described below. It must be one\n  issued **for login**.\n\n**Response**\n\n- `200` returns the SOXAI user id, an access token, a refresh token and the expiry.\n\n**Errors**\n\n| Status | Condition |\n| --- | --- |\n| 400 | The certificate is invalid for this purpose |\n| 404 | `ex_uid` names no user of this company |\n| 503 | The token exchange service returned a server error |\n\n**Authorization**\n\n- No SOXAI user token. The caller authenticates with `signed_cer`, a payload signed with the\n  partner company's private key and verified against the certificate SOXAI issued to that\n  company. The certificate also fixes **which company** the request may act on.\n- A certificate that is unknown, revoked, expired, wrongly signed or issued for a different\n  purpose is refused with `400`.",
         "operationId": "login_company_user_endpoint",
         "requestBody": {
           "content": {
@@ -18436,7 +18436,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred. error_msg is \"Failed to login user\" when the login returned no result",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -18490,7 +18490,67 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Server error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable - the token exchange service returned a server error",
+            "headers": {
+              "X-RateLimit-Limit": {
+                "description": "Maximum capacity of the continuously refilled minute bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining": {
+                "description": "Whole tokens remaining in the minute bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset": {
+                "description": "Unix timestamp in seconds when the minute bucket is expected to be full. This is not a calendar reset time.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              },
+              "X-RateLimit-Limit-Day": {
+                "description": "Maximum capacity of the continuously refilled daily bucket.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Remaining-Day": {
+                "description": "Whole tokens remaining in the daily bucket after this request.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0
+                }
+              },
+              "X-RateLimit-Reset-Day": {
+                "description": "Unix timestamp in seconds when the daily bucket is expected to be full. The bucket refills continuously and does not reset at midnight.",
+                "schema": {
+                  "type": "integer",
+                  "minimum": 0.0,
+                  "format": "int64"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "error": "http-error",
+                  "error_msg": "Authentication is temporarily unavailable."
                 }
               }
             }
@@ -18776,7 +18836,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -18830,7 +18890,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -19179,7 +19239,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -19233,7 +19293,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -19507,7 +19567,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -19573,7 +19633,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -19627,7 +19687,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -19917,7 +19977,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -20043,7 +20103,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -20097,7 +20157,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -20410,7 +20470,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -20476,7 +20536,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - the sync logs could not be fetched",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -20530,7 +20590,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Failed to fetch sync logs"
                 }
               }
             }
@@ -20801,7 +20861,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -20867,7 +20927,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -20921,7 +20981,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -21198,7 +21258,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -21324,7 +21384,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -21378,7 +21438,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -21663,7 +21723,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -21789,7 +21849,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -21843,7 +21903,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -22149,7 +22209,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -22275,7 +22335,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -22329,7 +22389,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -22561,7 +22621,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -22687,7 +22747,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -22741,7 +22801,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -22979,7 +23039,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -23105,7 +23165,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -23159,7 +23219,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -23464,7 +23524,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -23650,7 +23710,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -23704,7 +23764,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -23954,7 +24014,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -24020,7 +24080,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -24074,7 +24134,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -24391,7 +24451,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -24457,7 +24517,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -24511,7 +24571,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -24744,7 +24804,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -24810,7 +24870,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -24864,7 +24924,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -25114,7 +25174,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -25180,7 +25240,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -25234,7 +25294,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -25540,7 +25600,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -25666,7 +25726,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -25720,7 +25780,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -26052,7 +26112,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -26178,7 +26238,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -26232,7 +26292,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -26563,7 +26623,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -26629,7 +26689,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -26683,7 +26743,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -27041,7 +27101,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -27227,7 +27287,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -27281,7 +27341,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -27637,7 +27697,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -27763,7 +27823,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -27817,7 +27877,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -28224,7 +28284,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -28350,7 +28410,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -28404,7 +28464,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -28641,7 +28701,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -28767,7 +28827,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -28821,7 +28881,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -29118,7 +29178,7 @@
                 },
                 "example": {
                   "error": "http-error",
-                  "error_msg": "Invalid authentication credentials. <reason>"
+                  "error_msg": "Invalid authentication credentials."
                 }
               }
             }
@@ -29184,7 +29244,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -29238,7 +29298,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
@@ -29479,7 +29539,7 @@
             }
           },
           "500": {
-            "description": "Internal Server Error - Failed to fetch data",
+            "description": "Internal Server Error - an unexpected error occurred",
             "headers": {
               "X-RateLimit-Limit": {
                 "description": "Maximum capacity of the continuously refilled minute bucket.",
@@ -29533,7 +29593,7 @@
                 },
                 "example": {
                   "error": "internal-server-error",
-                  "error_msg": "Failed to fetch data: <error_message>"
+                  "error_msg": "Internal server error"
                 }
               }
             }
